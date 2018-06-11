@@ -327,8 +327,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         HttpClientHolder.getClient().getAccessToken(
                                 mEmail,
                                 mPassword,
-                                "2",
-                                "qx6UL9ngglpcyXm0swtsAPBjRfjLzbJjIEtoshZu",
+                                "6",
+                                "Lm6bJ1mMc3P4CqRrTkrMD8jS1p1E6HJTTjhNSZqs",
                                 "*",
                                 "password"
                         );
@@ -338,15 +338,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     @Override
                     public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
                         Log.d("auth", "success");
-
-                        String token = response.body().getAccessToken();
-                        if (token != null){
+                        try {
+                            String token = response.body().getAccessToken();
+                            Log.d("token", token);
                             AppDatabase.fetchUsers(token, getApplicationContext());
+                            Intent goToHomeActivity = new Intent(LoginActivity.this, HomeActivity.class);
+                            startActivity(goToHomeActivity);
+                        } catch (Exception e) {
+                            //
                         }
-
-
-                        Intent goToHomeActivity = new Intent(LoginActivity.this, HomeActivity.class);
-                        startActivity(goToHomeActivity);
                     }
 
                     @Override
@@ -355,8 +355,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     }
                 });
 
-
-            // TODO: register the new account here.
             return true;
         }
 

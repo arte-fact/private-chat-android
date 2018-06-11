@@ -1,5 +1,7 @@
 package fr.artefact.private_chat;
 
+import android.support.annotation.Nullable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -11,6 +13,7 @@ public class AuthResponse {
     @SerializedName("expires_in")
     @Expose
     private Integer expiresIn;
+    @Nullable
     @SerializedName("access_token")
     @Expose
     private String accessToken;

@@ -4,6 +4,8 @@ import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import java.util.List;
 import retrofit2.Call;
@@ -43,8 +45,9 @@ public abstract class AppDatabase extends RoomDatabase {
         // Execute the call asynchronously. Get a positive or negative callback.
         usersCall.enqueue(new retrofit2.Callback<List<User>>() {
             @Override
-            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                db.userDao().insertAll((List<User>) response.body());
+            public void onResponse(@NonNull Call<List<User>> call, @NonNull Response<List<User>> response) {
+                Log.d("fetchuser", response.body().toString());
+                db.userDao().insertAll(response.body());
                 Log.d("db:", db.userDao().getAll().toString());
             }
 

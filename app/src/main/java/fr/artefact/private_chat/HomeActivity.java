@@ -1,6 +1,8 @@
 package fr.artefact.private_chat;
 
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 public class HomeActivity extends AppCompatActivity {
@@ -12,17 +14,22 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(android.os.Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-
         java.util.List<User> contacts = AppDatabase.getAppDatabase(getApplicationContext()).userDao().getAll();
-        RecyclerView homeRecyclerView = findViewById(R.id.home_recycler_view);
-        homeRecyclerView.setLayoutManager(mLayoutManager);
 
-        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView = new RecyclerView(HomeActivity.this);
+
+        mLayoutManager = new LinearLayoutManager(HomeActivity.this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
 
         mAdapter = new UserAdapter(contacts);
         mRecyclerView.setAdapter(mAdapter);
 
-        }
+        mRecyclerView.getAdapter().notifyDataSetChanged();
+
+        ConstraintLayout layout = new ConstraintLayout(getBaseContext());
+        layout.addView(mRecyclerView);
+
+        setContentView(layout);
     }
+}
 
