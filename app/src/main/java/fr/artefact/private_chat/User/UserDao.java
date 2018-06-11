@@ -1,4 +1,4 @@
-package fr.artefact.private_chat;
+package fr.artefact.private_chat.User;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
@@ -15,7 +15,4 @@ public interface UserDao {
 
     @Insert (onConflict = REPLACE)
     void insertAll(List<User> users);
-
-    @Delete
-    void delete(User user);
 }

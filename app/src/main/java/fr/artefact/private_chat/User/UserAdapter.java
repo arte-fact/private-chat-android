@@ -1,16 +1,16 @@
-package fr.artefact.private_chat;
+package fr.artefact.private_chat.User;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
 import android.widget.TextView;
 
+import fr.artefact.private_chat.R;
+
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>  {
 
-    public java.util.List<User> dataset;
+    private java.util.List<User> dataSet;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView mTextView;
@@ -21,14 +21,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>  {
         }
 
         public void setData(User user) {
-            Log.d("name", user.getName());
             mTextView.setText(user.getName());
-
         }
     }
 
     public UserAdapter(java.util.List<User> users) {
-        dataset = users;
+        dataSet = users;
     }
 
     @Override
@@ -40,14 +38,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>  {
     }
 
     @Override
-    public void onBindViewHolder(UserAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull UserAdapter.ViewHolder holder, int position) {
 
-        User item = dataset.get(position);
+        User item = dataSet.get(position);
         holder.setData(item);
     }
 
     @Override
     public int getItemCount() {
-        return dataset.size();
+        return dataSet.size();
     }
 }

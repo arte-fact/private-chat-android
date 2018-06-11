@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.util.List;
 
+import fr.artefact.private_chat.User.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

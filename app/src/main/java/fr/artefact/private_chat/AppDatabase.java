@@ -5,9 +5,11 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import java.util.List;
+
+import fr.artefact.private_chat.User.User;
+import fr.artefact.private_chat.User.UserDao;
 import retrofit2.Call;
 import retrofit2.Response;
 

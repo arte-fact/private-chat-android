@@ -1,6 +1,8 @@
 package fr.artefact.private_chat;
 
 import java.util.List;
+
+import fr.artefact.private_chat.User.User;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;

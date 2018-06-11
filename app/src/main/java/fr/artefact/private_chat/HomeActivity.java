@@ -4,6 +4,11 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Toast;
+
+import fr.artefact.private_chat.User.User;
+import fr.artefact.private_chat.User.UserAdapter;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -14,7 +19,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(android.os.Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        java.util.List<User> contacts = AppDatabase.getAppDatabase(getApplicationContext()).userDao().getAll();
+        final java.util.List<User> contacts = AppDatabase.getAppDatabase(getApplicationContext()).userDao().getAll();
 
         mRecyclerView = new RecyclerView(HomeActivity.this);
 
@@ -28,6 +33,22 @@ public class HomeActivity extends AppCompatActivity {
 
         ConstraintLayout layout = new ConstraintLayout(getBaseContext());
         layout.addView(mRecyclerView);
+
+        mRecyclerView.addOnItemTouchListener(
+                new RecyclerItemOnClickListener(
+                        HomeActivity.this,
+                        mRecyclerView,
+                        new RecyclerItemOnClickListener.OnItemClickListener() {
+                            @Override public void onItemClick(View view, int position) {
+                                String message = contacts.get(position).getEmail();
+                                Toast.makeText(HomeActivity.this, message, Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override public void onLongItemClick(View view, int position) {
+                                Toast.makeText(HomeActivity.this, "click long", Toast.LENGTH_LONG).show();
+                            }
+                        })
+        );
 
         setContentView(layout);
     }
