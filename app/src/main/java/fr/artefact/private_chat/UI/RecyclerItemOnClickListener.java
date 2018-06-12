@@ -1,4 +1,4 @@
-package fr.artefact.private_chat;
+package fr.artefact.private_chat.UI;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

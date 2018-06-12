@@ -1,7 +1,10 @@
-package fr.artefact.private_chat;
+package fr.artefact.private_chat.HttpClient;
 
 import java.util.List;
 
+import fr.artefact.private_chat.Auth.AuthResponse;
+import fr.artefact.private_chat.Conversation.Conversation;
+import fr.artefact.private_chat.Message.Message;
 import fr.artefact.private_chat.User.User;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -24,4 +27,10 @@ public interface HttpClient {
 
     @GET("api/users")
     Call<List<User>> getUsers(@Header("authorization") String token);
+
+    @GET("api/messages")
+    Call<List<Message>> getMessages(@Header("authorization") String token);
+
+    @GET("api/conversations")
+    Call<List<Conversation>> getConversations(@Header("authorization") String token);
 }

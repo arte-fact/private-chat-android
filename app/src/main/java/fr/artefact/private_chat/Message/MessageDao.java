@@ -1,4 +1,4 @@
-package fr.artefact.private_chat.User;
+package fr.artefact.private_chat.Message;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
@@ -8,10 +8,10 @@ import java.util.List;
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
 @Dao
-public interface UserDao {
-    @Query("SELECT * FROM user")
-    List<User> getAll();
+public interface MessageDao {
+    @Query("SELECT * FROM message")
+    List<Message> getAll();
 
     @Insert (onConflict = REPLACE)
-    void insertAll(List<User> users);
+    void insertAll(List<Message> messages);
 }

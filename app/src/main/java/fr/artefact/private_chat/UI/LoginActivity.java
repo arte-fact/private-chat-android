@@ -1,4 +1,4 @@
-package fr.artefact.private_chat;
+package fr.artefact.private_chat.UI;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -34,6 +34,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.artefact.private_chat.Core.AppDatabase;
+import fr.artefact.private_chat.Auth.AuthResponse;
+import fr.artefact.private_chat.Core.DataRequests;
+import fr.artefact.private_chat.HttpClient.HttpClientHolder;
+import fr.artefact.private_chat.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -314,7 +319,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {
@@ -323,37 +328,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
             }
 
-            Call<AuthResponse> call =
-                        HttpClientHolder.getClient().getAccessToken(
-                                mEmail,
-                                mPassword,
-                                "6",
-                                "Lm6bJ1mMc3P4CqRrTkrMD8jS1p1E6HJTTjhNSZqs",
-                                "*",
-                                "password"
-                        );
-
-            // Execute the call asynchronously. Get a positive or negative callback.
-            call.enqueue(new Callback<AuthResponse>() {
-                    @Override
-                    public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
-                        Log.d("auth", "success");
-                        try {
-                            String token = response.body().getAccessToken();
-                            Log.d("token", token);
-                            AppDatabase.fetchUsers(token, getApplicationContext());
-                            Intent goToHomeActivity = new Intent(LoginActivity.this, HomeActivity.class);
-                            startActivity(goToHomeActivity);
-                        } catch (Exception e) {
-                            //
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<AuthResponse> call, Throwable t) {
-                        Log.d("auth", "fail");
-                    }
-                });
+            if(DataRequests.fetchAuthResponse(mEmail, mPassword, LoginActivity.this)) {
+                Intent home = new Intent(LoginActivity.this, HomeActivity.class);
+                startActivity(home);
+            }
 
             return true;
         }

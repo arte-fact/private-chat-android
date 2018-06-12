@@ -1,4 +1,4 @@
-package fr.artefact.private_chat;
+package fr.artefact.private_chat.Core;
 
 import java.io.IOException;
 

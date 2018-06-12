@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="fr.artefact.private_chat.HomeActivity">
+    tools:context="fr.artefact.private_chat.UI.HomeActivity">
 
     <android.support.v7.widget.RecyclerView
         xmlns:tools="http://schemas.android.com/tools"

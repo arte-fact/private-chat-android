@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="fr.artefact.private_chat.LoginActivity">
+    tools:context="fr.artefact.private_chat.UI.LoginActivity">
 
     <!-- Login progress -->
     <ProgressBar
