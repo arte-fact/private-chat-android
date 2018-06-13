@@ -1,11 +1,11 @@
-package fr.artefact.private_chat.HttpClient;
+package fr.artefact.private_chat.Utilities.HttpClient;
 
 import java.util.List;
 
-import fr.artefact.private_chat.Auth.AuthResponse;
-import fr.artefact.private_chat.Conversation.Conversation;
-import fr.artefact.private_chat.Message.Message;
-import fr.artefact.private_chat.User.User;
+import fr.artefact.private_chat.Models.AuthResponse;
+import fr.artefact.private_chat.Models.Conversation;
+import fr.artefact.private_chat.Models.Message;
+import fr.artefact.private_chat.Models.User;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;

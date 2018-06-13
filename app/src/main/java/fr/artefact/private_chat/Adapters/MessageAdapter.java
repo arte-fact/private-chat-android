@@ -1,4 +1,4 @@
-package fr.artefact.private_chat.Message;
+package fr.artefact.private_chat.Adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import fr.artefact.private_chat.Models.Message;
 import fr.artefact.private_chat.R;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder>  {

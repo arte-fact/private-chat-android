@@ -1,4 +1,4 @@
-package fr.artefact.private_chat.Auth;
+package fr.artefact.private_chat.Models;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;

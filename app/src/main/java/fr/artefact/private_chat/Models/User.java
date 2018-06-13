@@ -1,39 +1,30 @@
-package fr.artefact.private_chat.Conversation;
+package fr.artefact.private_chat.Models;
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
-import fr.artefact.private_chat.Message.Message;
-
-@Entity(tableName = "conversation")
-public class Conversation {
+@Entity(tableName = "user")
+public class User {
 
     @PrimaryKey
     @SerializedName("id")
     @Expose
     private Integer id;
-
     @SerializedName("name")
     @Expose
     private String name;
-
+    @SerializedName("email")
+    @Expose
+    private String email;
     @SerializedName("created_at")
     @Expose
-    private Integer createdAt;
-
+    private String createdAt;
     @SerializedName("updated_at")
     @Expose
-    private Integer updatedAt;
-
-    @SerializedName("message")
-    @Ignore
-    private List<Message> message;
+    private String updatedAt;
 
     public Integer getId() {
         return id;
@@ -51,21 +42,27 @@ public class Conversation {
         this.name = name;
     }
 
-    public Integer getCreatedAt() {
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Integer createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Integer getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Integer updatedAt) {
+    public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
-
-    public List<Message> getMessages() { return message; }
 }

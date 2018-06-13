@@ -1,4 +1,4 @@
-package fr.artefact.private_chat.HttpClient;
+package fr.artefact.private_chat.Utilities.HttpClient;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;

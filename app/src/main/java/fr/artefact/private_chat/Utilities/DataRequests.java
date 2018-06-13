@@ -1,4 +1,4 @@
-package fr.artefact.private_chat.Core;
+package fr.artefact.private_chat.Utilities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,12 +7,12 @@ import android.util.Log;
 
 import java.util.List;
 
-import fr.artefact.private_chat.Auth.AuthResponse;
-import fr.artefact.private_chat.Conversation.Conversation;
-import fr.artefact.private_chat.HttpClient.HttpClientHolder;
-import fr.artefact.private_chat.Message.Message;
-import fr.artefact.private_chat.UI.LoginActivity;
-import fr.artefact.private_chat.User.User;
+import fr.artefact.private_chat.Models.AuthResponse;
+import fr.artefact.private_chat.Models.Conversation;
+import fr.artefact.private_chat.Utilities.HttpClient.HttpClientHolder;
+import fr.artefact.private_chat.Models.Message;
+import fr.artefact.private_chat.Activites.LoginActivity;
+import fr.artefact.private_chat.Models.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

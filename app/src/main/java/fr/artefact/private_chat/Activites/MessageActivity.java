@@ -1,4 +1,4 @@
-package fr.artefact.private_chat.UI;
+package fr.artefact.private_chat.Activites;
 
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -8,9 +8,9 @@ import android.support.v7.widget.RecyclerView;
 
 import java.util.List;
 
-import fr.artefact.private_chat.Core.AppDatabase;
-import fr.artefact.private_chat.Message.Message;
-import fr.artefact.private_chat.Message.MessageAdapter;
+import fr.artefact.private_chat.Utilities.AppDatabase;
+import fr.artefact.private_chat.Models.Message;
+import fr.artefact.private_chat.Adapters.MessageAdapter;
 
 public class MessageActivity extends AppCompatActivity {
 

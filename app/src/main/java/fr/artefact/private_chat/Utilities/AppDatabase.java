@@ -1,18 +1,18 @@
-package fr.artefact.private_chat.Core;
+package fr.artefact.private_chat.Utilities;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-import fr.artefact.private_chat.Auth.AuthResponse;
-import fr.artefact.private_chat.Auth.AuthResponseDao;
-import fr.artefact.private_chat.Conversation.Conversation;
-import fr.artefact.private_chat.Conversation.ConversationDao;
-import fr.artefact.private_chat.Message.Message;
-import fr.artefact.private_chat.Message.MessageDao;
-import fr.artefact.private_chat.User.User;
-import fr.artefact.private_chat.User.UserDao;
+import fr.artefact.private_chat.Models.AuthResponse;
+import fr.artefact.private_chat.Interfaces.AuthResponseDao;
+import fr.artefact.private_chat.Models.Conversation;
+import fr.artefact.private_chat.Interfaces.ConversationDao;
+import fr.artefact.private_chat.Models.Message;
+import fr.artefact.private_chat.Interfaces.MessageDao;
+import fr.artefact.private_chat.Models.User;
+import fr.artefact.private_chat.Interfaces.UserDao;
 
 @Database(entities = {User.class, AuthResponse.class, Conversation.class, Message.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {

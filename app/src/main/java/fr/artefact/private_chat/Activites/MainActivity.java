@@ -1,4 +1,4 @@
-package fr.artefact.private_chat.UI;
+package fr.artefact.private_chat.Activites;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,10 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import java.util.List;
 
-import fr.artefact.private_chat.Auth.AuthResponse;
-import fr.artefact.private_chat.Core.AppDatabase;
-import fr.artefact.private_chat.Core.DataRequests;
-import fr.artefact.private_chat.Message.Message;
+import fr.artefact.private_chat.Utilities.AppDatabase;
+import fr.artefact.private_chat.Utilities.DataRequests;
+import fr.artefact.private_chat.Models.Message;
 
 public class MainActivity extends AppCompatActivity {
 

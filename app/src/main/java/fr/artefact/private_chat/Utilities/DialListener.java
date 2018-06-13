@@ -1,10 +1,10 @@
-package fr.artefact.private_chat.Core;
+package fr.artefact.private_chat.Utilities;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import fr.artefact.private_chat.UI.MainActivity;
+import fr.artefact.private_chat.Activites.MainActivity;
 
 public class DialListener extends BroadcastReceiver {
     @Override

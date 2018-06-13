@@ -1,4 +1,4 @@
-package fr.artefact.private_chat.UI;
+package fr.artefact.private_chat.Activites;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -20,7 +20,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,14 +33,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.artefact.private_chat.Core.AppDatabase;
-import fr.artefact.private_chat.Auth.AuthResponse;
-import fr.artefact.private_chat.Core.DataRequests;
-import fr.artefact.private_chat.HttpClient.HttpClientHolder;
+import fr.artefact.private_chat.Utilities.DataRequests;
 import fr.artefact.private_chat.R;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static android.Manifest.permission.READ_CONTACTS;
 

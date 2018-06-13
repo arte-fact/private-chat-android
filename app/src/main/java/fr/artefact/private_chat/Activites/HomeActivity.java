@@ -1,4 +1,4 @@
-package fr.artefact.private_chat.UI;
+package fr.artefact.private_chat.Activites;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,9 +11,10 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import fr.artefact.private_chat.Conversation.Conversation;
-import fr.artefact.private_chat.Conversation.ConversationAdapter;
-import fr.artefact.private_chat.Core.AppDatabase;
+import fr.artefact.private_chat.Models.Conversation;
+import fr.artefact.private_chat.Adapters.ConversationAdapter;
+import fr.artefact.private_chat.Utilities.AppDatabase;
+import fr.artefact.private_chat.Utilities.RecyclerItemOnClickListener;
 
 public class HomeActivity extends AppCompatActivity {
 
