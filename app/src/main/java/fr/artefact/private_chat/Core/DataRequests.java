@@ -26,7 +26,7 @@ public class DataRequests {
                         mEmail,
                         mPassword,
                         "2",
-                        "iCrXGlsiO1wKP0rYfXKQX8zQ6BTG0vqWDZzIOc8B",
+                        "aoVIjU2Y8Q5KMNVy0ikGdaCbt1TJWwlfSQTwfwy0",
                         "*",
                         "password"
                 );
@@ -94,6 +94,28 @@ public class DataRequests {
 
             @Override
             public void onFailure(Call<List<Conversation>> call, Throwable t) {
+                //
+            }
+        });
+    }
+
+    public static void fetchMessages (String token, Context context) {
+
+        final AppDatabase db = AppDatabase.getAppDatabase(context);
+        Boolean status = false;
+
+        final Call<List<Message>> messagesCall =
+                HttpClientHolder.getClient().getMessages("Bearer " + token);
+
+        // Execute the call asynchronously. Get a positive or negative callback.
+        messagesCall.enqueue(new Callback<List<Message>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Message>> call,@NonNull Response<List<Message>> response) {
+                db.messageDao().insertAll(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<Message>> call, Throwable t) {
                 //
             }
         });

@@ -12,6 +12,9 @@ public interface MessageDao {
     @Query("SELECT * FROM message")
     List<Message> getAll();
 
+    @Query("SELECT * FROM message WHERE conversationId = :conversationId")
+    List<Message> getConversationMessages(int conversationId);
+
     @Insert (onConflict = REPLACE)
     void insertAll(List<Message> messages);
 }

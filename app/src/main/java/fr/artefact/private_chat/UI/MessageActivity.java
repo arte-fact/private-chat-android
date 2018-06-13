@@ -1,11 +1,10 @@
 package fr.artefact.private_chat.UI;
 
+import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -23,8 +22,10 @@ public class MessageActivity extends AppCompatActivity {
     protected void onCreate(android.os.Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Bundle options = getIntent().getExtras();
+
         final List<Message> messages =
-                AppDatabase.getAppDatabase(getApplicationContext()).messageDao().getAll();
+                AppDatabase.getAppDatabase(getApplicationContext()).messageDao().getConversationMessages(options.getInt("conversation_id"));
 
         mRecyclerView = new RecyclerView(MessageActivity.this);
 

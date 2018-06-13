@@ -1,25 +1,19 @@
 package fr.artefact.private_chat.UI;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import java.util.List;
 
-import fr.artefact.private_chat.Auth.AuthResponse;
 import fr.artefact.private_chat.Conversation.Conversation;
 import fr.artefact.private_chat.Conversation.ConversationAdapter;
 import fr.artefact.private_chat.Core.AppDatabase;
-import fr.artefact.private_chat.Core.DataRequests;
-import fr.artefact.private_chat.Message.Message;
-import fr.artefact.private_chat.Message.MessageAdapter;
-import fr.artefact.private_chat.User.User;
-import fr.artefact.private_chat.User.UserAdapter;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -52,8 +46,10 @@ public class HomeActivity extends AppCompatActivity {
                         new RecyclerItemOnClickListener.OnItemClickListener() {
                             @Override public void onItemClick(View view, int position) {
                                 Intent message = new Intent(HomeActivity.this, MessageActivity.class);
-                                startActivity(message);
-                                Toast.makeText(HomeActivity.this, "coucou", Toast.LENGTH_LONG).show();
+                                Bundle bundle = new Bundle();
+                                bundle.putInt("conversation_id", position);
+                                message.putExtras(bundle);
+                                startActivity(message, bundle);
                             }
 
                             @Override public void onLongItemClick(View view, int position) {
@@ -61,7 +57,6 @@ public class HomeActivity extends AppCompatActivity {
                             }
                         })
         );
-
         setContentView(layout);
     }
 }
