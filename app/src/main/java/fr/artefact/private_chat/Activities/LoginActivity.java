@@ -1,4 +1,4 @@
-package fr.artefact.private_chat.Activites;
+package fr.artefact.private_chat.Activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

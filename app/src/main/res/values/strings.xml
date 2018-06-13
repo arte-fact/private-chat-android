@@ -19,4 +19,5 @@
         completions."
     </string>
     <string name="title_activity_login2">Sign in</string>
+    <string name="message_send_button">Send</string>
 </resources>

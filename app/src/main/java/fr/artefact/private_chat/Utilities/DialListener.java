@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import fr.artefact.private_chat.Activites.MainActivity;
+import fr.artefact.private_chat.Activities.MainActivity;
 
 public class DialListener extends BroadcastReceiver {
     @Override

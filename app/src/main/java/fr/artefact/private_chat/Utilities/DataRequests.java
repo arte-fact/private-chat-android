@@ -11,7 +11,7 @@ import fr.artefact.private_chat.Models.AuthResponse;
 import fr.artefact.private_chat.Models.Conversation;
 import fr.artefact.private_chat.Utilities.HttpClient.HttpClientHolder;
 import fr.artefact.private_chat.Models.Message;
-import fr.artefact.private_chat.Activites.LoginActivity;
+import fr.artefact.private_chat.Activities.LoginActivity;
 import fr.artefact.private_chat.Models.User;
 import retrofit2.Call;
 import retrofit2.Callback;
