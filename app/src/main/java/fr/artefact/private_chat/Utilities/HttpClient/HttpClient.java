@@ -7,6 +7,7 @@ import fr.artefact.private_chat.Models.Conversation;
 import fr.artefact.private_chat.Models.Message;
 import fr.artefact.private_chat.Models.User;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -33,4 +34,10 @@ public interface HttpClient {
 
     @GET("api/conversations")
     Call<List<Conversation>> getConversations(@Header("authorization") String token);
+
+    @POST("api/messages")
+    Call<Message> postMessage(
+            @Header("authorization") String token,
+            @Body Message message
+            );
 }

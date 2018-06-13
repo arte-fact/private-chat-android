@@ -19,4 +19,7 @@ public interface MessageDao {
 
     @Insert (onConflict = REPLACE)
     void insertAll(List<Message> messages);
+
+    @Insert (onConflict = REPLACE)
+    void insert(Message message);
 }
