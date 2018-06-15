@@ -2,21 +2,14 @@ package fr.artefact.private_chat.Adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.view.ViewGroup;
 import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
-import com.pusher.client.channel.Channel;
-import com.pusher.client.channel.SubscriptionEventListener;
 
 import java.util.List;
 
-import fr.artefact.private_chat.Activities.MessageActivity;
 import fr.artefact.private_chat.Models.Message;
 import fr.artefact.private_chat.R;
-import fr.artefact.private_chat.Utilities.PusherClient;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder>  {
 
@@ -72,12 +65,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         this.dataSet = dataSet;
         notifyDataSetChanged();
         this.mRecyclerView.scrollToPosition(mRecyclerView.getAdapter().getItemCount() - 1);
-
     }
 
     public void addItem(Message message) {
         this.dataSet.add(message);
         notifyDataSetChanged();
-        this.mRecyclerView.scrollToPosition(mRecyclerView.getAdapter().getItemCount() - 1);
+        this.mRecyclerView.smoothScrollToPosition(mRecyclerView.getAdapter().getItemCount() - 1);
     }
 }

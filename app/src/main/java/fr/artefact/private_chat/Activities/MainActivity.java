@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
             String token = AppDatabase.getAppDatabase(getApplicationContext()).authResponseDao().getAll().getAccessToken();
 
             DataRequests.fetchUsers(token, getApplicationContext());
-            DataRequests.fetchConversations(token, getApplicationContext());
 
             Intent home = new Intent(this, HomeActivity.class);
             super.onCreate(savedInstanceState);

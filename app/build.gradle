@@ -62,4 +62,5 @@ dependencies {
 
     implementation 'com.auth0.android:jwtdecode:1.1.1'
 
+    implementation "com.android.support:support-compat:27.1.1"
 }

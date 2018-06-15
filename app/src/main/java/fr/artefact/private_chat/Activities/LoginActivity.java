@@ -29,6 +29,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -322,14 +323,26 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
             }
 
-            if(DataRequests.fetchAuthResponse(mEmail, mPassword, LoginActivity.this)) {
+            try {
+                DataRequests.fetchAuthResponse(mEmail, mPassword, LoginActivity.this);
                 DataRequests.fetchConversations(
-                        AppDatabase.getAppDatabase(LoginActivity.this.getApplicationContext()).authResponseDao().getAll().getAccessToken(),
-                        LoginActivity.this
+                        AppDatabase.getAppDatabase(LoginActivity.this).authResponseDao().getAll().getAccessToken(),
+                        LoginActivity.this,
+                        null
                 );
                 Intent home = new Intent(LoginActivity.this, HomeActivity.class);
                 startActivity(home);
+            } catch (final Exception e) {
+                LoginActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(LoginActivity.this, "Erreur d'authentification :'(", Toast.LENGTH_SHORT).show();
+                        Intent login = new Intent(LoginActivity.this, LoginActivity.class);
+                        startActivity(login);
+                    }
+                });
             }
+
 
             return true;
         }

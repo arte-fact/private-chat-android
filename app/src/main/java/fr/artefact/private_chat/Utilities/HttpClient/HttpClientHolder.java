@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HttpClientHolder {
 
-    static String API_BASE_URL = "http://10.0.2.2:8000/";
+    static String API_BASE_URL = "https://www.the-emperors-server.dtdns.net/";
 
     static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 

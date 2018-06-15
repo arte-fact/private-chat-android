@@ -19,7 +19,7 @@ public class PusherClient {
     private String appKey= "a7460dcc066019b90756";
 
 
-    public PusherClient(final MessageAdapter messageAdapter) {
+    public PusherClient() {
         options = new PusherOptions().setCluster(appCluster);
         pusher = new Pusher(appKey, options);
         pusher.connect(new ConnectionEventListener() {

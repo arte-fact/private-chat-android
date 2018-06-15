@@ -23,6 +23,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DataRequests {
+
     public static boolean fetchAuthResponse (String mEmail, String mPassword, final Context context) {
         final AppDatabase db = AppDatabase.getAppDatabase(context);
 
@@ -31,7 +32,7 @@ public class DataRequests {
                         mEmail,
                         mPassword,
                         "2",
-                        "5jnDemhkTMszJsgbpa6Y3MJ13Yag6tgFP3CCJKtg",
+                        "AuYzVbvVAbrRSZnTFUAzz5ZEZPmP7xEGivD9UrsS",
                         "*",
                         "password"
                 );
@@ -39,18 +40,14 @@ public class DataRequests {
         // Execute the call asynchronously. Get a positive or negative callback.
         call.enqueue(new Callback<AuthResponse>() {
             @Override
-            public void onResponse(@NonNull Call<AuthResponse> call,@NonNull Response<AuthResponse> response) {
-                if (response.isSuccessful()) {
-                    try {
-                        db.authResponseDao().insert(response.body());
-                    } catch (Exception e) {
-                        Toast.makeText(context, "Echec de l'authentification... :'(", Toast.LENGTH_SHORT).show();
-                        Intent login = new Intent(context, LoginActivity.class);
-                        context.startActivity(login);
-                    }
-                } else {
+            public void onResponse(@NonNull Call<AuthResponse> call, @NonNull Response<AuthResponse> response) {
+                try {
+                    String token = response.body().getAccessToken();
+                    db.authResponseDao().insert(response.body());
+                    Log.d("auth:", response.body().getAccessToken());
+                } catch (Exception e) {
+                    Toast.makeText(context, "Echec de l'authentification... :'(", Toast.LENGTH_SHORT).show();
                     Intent login = new Intent(context, LoginActivity.class);
-                    Toast.makeText(context, response.body().toString(), Toast.LENGTH_SHORT).show();
                     context.startActivity(login);
                 }
             }
@@ -61,14 +58,13 @@ public class DataRequests {
             }
         });
 
+
         return true;
     }
 
     public static void fetchUsers (String token, final Context context) {
 
         final AppDatabase db = AppDatabase.getAppDatabase(context);
-        Boolean status = false;
-
         final Call<List<User>> usersCall =
                 HttpClientHolder.getClient().getUsers("Bearer " + token);
 
@@ -87,19 +83,20 @@ public class DataRequests {
         });
     }
 
-    public static void fetchConversations (String token, final Context context) {
+    public static void fetchConversations (String token, final Context context, final ConversationAdapter mAdapter) {
 
         final AppDatabase db = AppDatabase.getAppDatabase(context);
-        Boolean status = false;
-
         final Call<List<Conversation>> messagesCall =
                 HttpClientHolder.getClient().getConversations("Bearer " + token);
 
-        // Execute the call asynchronously. Get a positive or negative callback.
         messagesCall.enqueue(new Callback<List<Conversation>>() {
             @Override
             public void onResponse(@NonNull Call<List<Conversation>> call,@NonNull Response<List<Conversation>> response) {
-                db.conversationDao().insertAll(response.body());
+                if(mAdapter == null) {
+                    db.conversationDao().insertAll(response.body());
+                } else {
+                    mAdapter.addItems(response.body());
+                }
                 Toast.makeText(context, "MAJ des conversations :)", Toast.LENGTH_SHORT).show();
             }
 
@@ -156,8 +153,7 @@ public class DataRequests {
 
             @Override
             public void onFailure(@NonNull Call<List<Message>> call, @NonNull Throwable t) {
-                Toast.makeText(context, t.toString() + "Pas de réponse du serveur... :'(", Toast.LENGTH_SHORT).show();
-                Log.d("fetchMessage erreur:", t.toString());
+                Toast.makeText(context, "Pas de réponse du serveur... :'(", Toast.LENGTH_SHORT).show();
             }
         });
     }
