@@ -19,15 +19,19 @@ import fr.artefact.private_chat.Utilities.RecyclerItemOnClickListener;
 public class HomeActivity extends AppCompatActivity {
 
     RecyclerView mRecyclerView;
-    RecyclerView.Adapter mAdapter;
+    ConversationAdapter mAdapter;
     RecyclerView.LayoutManager mLayoutManager;
+
 
     @Override
     protected void onCreate(android.os.Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final List<Conversation> conversations =
-                AppDatabase.getAppDatabase(getApplicationContext()).conversationDao().getAll();
+        final AppDatabase db = AppDatabase.getAppDatabase(HomeActivity.this);
+
+        final List<Conversation> conversations = db.conversationDao().getAll();
+
+//        final String token = db.authResponseDao().getAll().getAccessToken();
 
         mRecyclerView = new RecyclerView(HomeActivity.this);
 
@@ -36,6 +40,8 @@ public class HomeActivity extends AppCompatActivity {
 
         mAdapter = new ConversationAdapter(conversations);
         mRecyclerView.setAdapter(mAdapter);
+
+//        DataRequests.updateConversations(token, getApplicationContext(), mAdapter);
 
         ConstraintLayout layout = new ConstraintLayout(getBaseContext());
         layout.addView(mRecyclerView);

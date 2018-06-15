@@ -25,9 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
             DataRequests.fetchUsers(token, getApplicationContext());
             DataRequests.fetchConversations(token, getApplicationContext());
-            DataRequests.fetchMessages(token, getApplicationContext());
 
-            List<Message> messages = AppDatabase.getAppDatabase(MainActivity.this).messageDao().getAll();
             Intent home = new Intent(this, HomeActivity.class);
             super.onCreate(savedInstanceState);
             startActivity(home);

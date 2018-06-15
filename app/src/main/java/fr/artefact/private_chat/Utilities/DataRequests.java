@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.List;
 
 import fr.artefact.private_chat.Activities.LoginActivity;
 import fr.artefact.private_chat.Activities.MessageActivity;
+import fr.artefact.private_chat.Adapters.ConversationAdapter;
 import fr.artefact.private_chat.Adapters.MessageAdapter;
 import fr.artefact.private_chat.Models.AuthResponse;
 import fr.artefact.private_chat.Models.Conversation;
@@ -29,7 +31,7 @@ public class DataRequests {
                         mEmail,
                         mPassword,
                         "2",
-                        "aoVIjU2Y8Q5KMNVy0ikGdaCbt1TJWwlfSQTwfwy0",
+                        "5jnDemhkTMszJsgbpa6Y3MJ13Yag6tgFP3CCJKtg",
                         "*",
                         "password"
                 );
@@ -48,6 +50,7 @@ public class DataRequests {
                     }
                 } else {
                     Intent login = new Intent(context, LoginActivity.class);
+                    Toast.makeText(context, response.body().toString(), Toast.LENGTH_SHORT).show();
                     context.startActivity(login);
                 }
             }
@@ -107,31 +110,59 @@ public class DataRequests {
         });
     }
 
-    public static void fetchMessages (String token, final Context context) {
+    public static void updateConversations (String token, final Context context, final ConversationAdapter conversationAdapter) {
+
+        final AppDatabase db = AppDatabase.getAppDatabase(context);
+        Boolean status = false;
+
+        final Call<List<Conversation>> messagesCall =
+                HttpClientHolder.getClient().getConversations("Bearer " + token);
+
+        // Execute the call asynchronously. Get a positive or negative callback.
+        messagesCall.enqueue(new Callback<List<Conversation>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Conversation>> call,@NonNull Response<List<Conversation>> response) {
+                conversationAdapter.addItems(db.conversationDao().getAll());
+                Toast.makeText(context, "MAJ des conversations :)", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<List<Conversation>> call, Throwable t) {
+                Toast.makeText(context, "Pas de réponse du serveur... :'(", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public static void fetchMessages (final Context context, final MessageAdapter messageAdapter) {
 
         final AppDatabase db = AppDatabase.getAppDatabase(context);
         Boolean status = false;
 
         final Call<List<Message>> messagesCall =
-                HttpClientHolder.getClient().getMessages("Bearer " + token);
+                HttpClientHolder.getClient().getMessages("Bearer " + db.authResponseDao().getAll().getAccessToken());
 
         // Execute the call asynchronously. Get a positive or negative callback.
         messagesCall.enqueue(new Callback<List<Message>>() {
             @Override
             public void onResponse(@NonNull Call<List<Message>> call,@NonNull Response<List<Message>> response) {
-                db.messageDao().insertAll(response.body());
+                try {
+                    messageAdapter.addItems(response.body());
+                } catch (Exception e) {
+                    //
+                }
                 Toast.makeText(context, "MAJ des messages :)", Toast.LENGTH_SHORT).show();
 
             }
 
             @Override
             public void onFailure(@NonNull Call<List<Message>> call, @NonNull Throwable t) {
-                Toast.makeText(context, "Pas de réponse du serveur... :'(", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, t.toString() + "Pas de réponse du serveur... :'(", Toast.LENGTH_SHORT).show();
+                Log.d("fetchMessage erreur:", t.toString());
             }
         });
     }
 
-    public static void sendMessage (String token, final Context context, Message message, final RecyclerView.Adapter messageAdapter) {
+    public static void sendMessage (String token, final Context context, Message message, final MessageAdapter messageAdapter) {
         final AppDatabase db = AppDatabase.getAppDatabase(context);
 
 
@@ -143,9 +174,8 @@ public class DataRequests {
             @Override
             public void onResponse(@NonNull Call<Message> call,@NonNull Response<Message> response) {
                 try {
-                    Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show();
-                    db.messageDao().insert(response.body());
-                    messageAdapter.notifyItemInserted(messageAdapter.getItemCount() + 1);
+//                    messageAdapter.addItem(response.body());
+//                    messageAdapter.mRecyclerView.scrollToPosition(messageAdapter.getItemCount() -1);
                 } catch (Exception e) {
                     Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
                 }

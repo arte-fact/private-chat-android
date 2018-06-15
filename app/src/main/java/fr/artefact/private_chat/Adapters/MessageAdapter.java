@@ -5,15 +5,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.pusher.client.channel.Channel;
+import com.pusher.client.channel.SubscriptionEventListener;
 
 import java.util.List;
 
+import fr.artefact.private_chat.Activities.MessageActivity;
 import fr.artefact.private_chat.Models.Message;
 import fr.artefact.private_chat.R;
+import fr.artefact.private_chat.Utilities.PusherClient;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder>  {
 
     private java.util.List<Message> dataSet;
+    public RecyclerView mRecyclerView;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView mTextView;
@@ -24,12 +32,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         }
 
         public void setData(Message message) {
-            mTextView.setText(message.getMessage());
+            mTextView.setText(message.getText());
         }
     }
 
-    public MessageAdapter(List<Message> messages) {
+    public MessageAdapter(final List<Message> messages) {
         dataSet = messages;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -50,5 +59,25 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     public int getItemCount() {
         return dataSet.size();
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+
+        mRecyclerView = recyclerView;
+    }
+
+    public void addItems(List<Message> dataSet) {
+        this.dataSet = dataSet;
+        notifyDataSetChanged();
+        this.mRecyclerView.scrollToPosition(mRecyclerView.getAdapter().getItemCount() - 1);
+
+    }
+
+    public void addItem(Message message) {
+        this.dataSet.add(message);
+        notifyDataSetChanged();
+        this.mRecyclerView.scrollToPosition(mRecyclerView.getAdapter().getItemCount() - 1);
     }
 }

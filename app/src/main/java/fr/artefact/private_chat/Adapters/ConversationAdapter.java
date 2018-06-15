@@ -9,6 +9,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import fr.artefact.private_chat.Models.Conversation;
+import fr.artefact.private_chat.Models.Message;
 import fr.artefact.private_chat.R;
 
 public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ViewHolder>  {
@@ -50,5 +51,15 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     @Override
     public int getItemCount() {
         return dataSet.size();
+    }
+
+    public void addItems(List<Conversation> dataSet) {
+        this.dataSet = dataSet;
+        notifyDataSetChanged();
+    }
+
+    public void addItem(Conversation message) {
+        this.dataSet.add(message);
+        notifyDataSetChanged();
     }
 }

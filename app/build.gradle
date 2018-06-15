@@ -57,4 +57,9 @@ dependencies {
     testImplementation "android.arch.persistence.room:testing:1.1.0"
 
     implementation 'com.android.support:cardview-v7:27.1.1'
+
+    implementation 'com.pusher:pusher-java-client:1.8.0'
+
+    implementation 'com.auth0.android:jwtdecode:1.1.1'
+
 }

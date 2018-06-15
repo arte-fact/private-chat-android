@@ -33,6 +33,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.artefact.private_chat.Utilities.AppDatabase;
 import fr.artefact.private_chat.Utilities.DataRequests;
 import fr.artefact.private_chat.R;
 
@@ -322,6 +323,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
 
             if(DataRequests.fetchAuthResponse(mEmail, mPassword, LoginActivity.this)) {
+                DataRequests.fetchConversations(
+                        AppDatabase.getAppDatabase(LoginActivity.this.getApplicationContext()).authResponseDao().getAll().getAccessToken(),
+                        LoginActivity.this
+                );
                 Intent home = new Intent(LoginActivity.this, HomeActivity.class);
                 startActivity(home);
             }

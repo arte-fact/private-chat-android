@@ -7,6 +7,8 @@ import android.arch.persistence.room.PrimaryKey;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.lang.reflect.Array;
+
 @Entity(tableName = "message")
 public class Message {
 
@@ -16,13 +18,13 @@ public class Message {
     private Integer id;
     @SerializedName("created_at")
     @Expose
-    private Integer createdAt;
+    private String createdAt;
     @SerializedName("updated_at")
     @Expose
-    private Integer updatedAt;
-    @SerializedName("message")
+    private String updatedAt;
+    @SerializedName("text")
     @Expose
-    private String message;
+    private String text;
     @SerializedName("author_id")
     @Expose
     private Integer authorId;
@@ -38,28 +40,28 @@ public class Message {
         this.id = id;
     }
 
-    public Integer getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Integer createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Integer getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Integer updatedAt) {
+    public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    public String getMessage() {
-        return message;
+    public String getText() {
+        return text;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public Integer getAuthorId() {
@@ -77,5 +79,4 @@ public class Message {
     public void setConversationId(Integer conversationId) {
         this.conversationId = conversationId;
     }
-
 }
