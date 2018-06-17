@@ -1,11 +1,9 @@
 package fr.artefact.private_chat.Activities;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
@@ -50,7 +48,6 @@ public class MessageActivity extends AppCompatActivity {
 
 
         setRecyclerView(messages);
-        DataRequests.fetchMessages(getApplicationContext(), mAdapter);
         subscribeChannel(conversationId);
         setButton(token);
         setKeyboardObserver();
@@ -96,7 +93,7 @@ public class MessageActivity extends AppCompatActivity {
                 message.setText(text);
                 message.setConversationId(conversationId);
 
-                DataRequests.sendMessage(token, MessageActivity.this, message, mAdapter);
+                DataRequests.sendMessage(token, MessageActivity.this, message);
             }
         });
     }

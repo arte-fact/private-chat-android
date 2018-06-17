@@ -32,7 +32,7 @@ public class PusherClient {
 
             @Override
             public void onError(String message, String code, Exception e) {
-                System.out.println("There was a problem connecting!");
+                Log.d("pusher","There was a problem connecting!");
             }
         }, ConnectionState.ALL);
     }

@@ -4,13 +4,15 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.text.DateFormat;
+
+import fr.artefact.private_chat.Utilities.AppDatabase;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HttpClientHolder {
 
-    static String API_BASE_URL = "https://www.the-emperors-server.dtdns.net/";
+    static String API_BASE_URL = "http://the-emperors.gotgeeks.com/";
 
     static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 

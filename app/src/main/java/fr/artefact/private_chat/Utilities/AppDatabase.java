@@ -5,16 +5,18 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
+import fr.artefact.private_chat.Interfaces.SettingsDao;
 import fr.artefact.private_chat.Models.AuthResponse;
 import fr.artefact.private_chat.Interfaces.AuthResponseDao;
 import fr.artefact.private_chat.Models.Conversation;
 import fr.artefact.private_chat.Interfaces.ConversationDao;
 import fr.artefact.private_chat.Models.Message;
 import fr.artefact.private_chat.Interfaces.MessageDao;
+import fr.artefact.private_chat.Models.Settings;
 import fr.artefact.private_chat.Models.User;
 import fr.artefact.private_chat.Interfaces.UserDao;
 
-@Database(entities = {User.class, AuthResponse.class, Conversation.class, Message.class}, version = 1)
+@Database(entities = {User.class, AuthResponse.class, Conversation.class, Message.class, Settings.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
@@ -26,6 +28,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract ConversationDao conversationDao();
 
     public abstract AuthResponseDao authResponseDao();
+
+    public abstract SettingsDao settingsDao();
 
     public static AppDatabase getAppDatabase(Context context) {
         if (INSTANCE == null) {
