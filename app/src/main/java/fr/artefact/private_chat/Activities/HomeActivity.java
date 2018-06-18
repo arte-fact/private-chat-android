@@ -2,11 +2,14 @@ package fr.artefact.private_chat.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.pusher.client.channel.Channel;
@@ -16,12 +19,13 @@ import java.util.List;
 
 import fr.artefact.private_chat.Adapters.ConversationAdapter;
 import fr.artefact.private_chat.Models.Conversation;
+import fr.artefact.private_chat.R;
 import fr.artefact.private_chat.Utilities.AppDatabase;
 import fr.artefact.private_chat.Utilities.DataRequests;
 import fr.artefact.private_chat.Utilities.PusherClient;
 import fr.artefact.private_chat.Utilities.RecyclerItemOnClickListener;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends Fragment {
 
     RecyclerView mRecyclerView;
     ConversationAdapter mAdapter;
@@ -32,73 +36,71 @@ public class HomeActivity extends AppCompatActivity {
     String token;
 
 
+    @Nullable
     @Override
-    protected void onCreate(android.os.Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_home, container, false);
+        return view;
+    }
 
-        db = AppDatabase.getAppDatabase(HomeActivity.this);
+
+    protected void subscribeChannels() {
+
+        db = AppDatabase.getAppDatabase(this.getContext());
         pusherClient = new PusherClient();
         try {
             token = db.authResponseDao().getAll().getAccessToken();
         } catch (Exception e) {
             token = null;
-            Intent loginActivity = new Intent(HomeActivity.this, LoginActivity.class);
-            startActivity(loginActivity);
+            return;
         }
 
         try {
             conversations = db.conversationDao().getAll();
         } catch (Exception e) {
             conversations = null;
+            return;
         }
         setRecyclerView(conversations);
 
-        if (token != null) {
-            DataRequests.fetchConversations(
-                    token,
-                    getApplicationContext(),
-                    mAdapter
-            );
-            DataRequests.fetchMessages(getApplicationContext());
-        }
+        DataRequests.fetchConversations(
+                token,
+                this.getContext(),
+                mAdapter
+        );
+        DataRequests.fetchMessages(this.getContext());
 
         for (Conversation conversation: conversations) {
             subscribeChannel(conversation.getId());
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    void unSubscribeChannels() {
         for (Conversation conversation: conversations) {
             unSubscribeChannel(conversation.getId());
         }
     }
 
     private void setRecyclerView(List<Conversation> conversations) {
-        mRecyclerView = new RecyclerView(HomeActivity.this);
+        mRecyclerView = getActivity().findViewById(R.id.home_recycler_view);
 
-        mLayoutManager = new LinearLayoutManager(HomeActivity.this);
+        mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         mAdapter = new ConversationAdapter(conversations);
         mRecyclerView.setAdapter(mAdapter);
 
-        ConstraintLayout layout = new ConstraintLayout(getBaseContext());
-
-        layout.addView(mRecyclerView);
         setClickListener();
-        setContentView(layout);
     }
 
     private void setClickListener() {
         mRecyclerView.addOnItemTouchListener(
                 new RecyclerItemOnClickListener(
-                        HomeActivity.this,
+                        getContext(),
                         mRecyclerView,
                         new RecyclerItemOnClickListener.OnItemClickListener() {
                             @Override public void onItemClick(View view, int position) {
-                                Intent message = new Intent(HomeActivity.this, MessageActivity.class);
+                                Intent message = new Intent(view.getContext(), MessageActivity.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putInt("conversation_id", db.conversationDao().getAll().get(position).getId());
                                 message.putExtras(bundle);
@@ -106,7 +108,7 @@ public class HomeActivity extends AppCompatActivity {
                             }
 
                             @Override public void onLongItemClick(View view, int position) {
-                                Toast.makeText(HomeActivity.this, "click long", Toast.LENGTH_LONG).show();
+                                Toast.makeText(view.getContext(), "click long", Toast.LENGTH_LONG).show();
                             }
                         })
         );
@@ -118,9 +120,9 @@ public class HomeActivity extends AppCompatActivity {
         channel.bind("App\\Events\\MessageCreatedEvent", new SubscriptionEventListener() {
             @Override
             public void onEvent(String channelName, String eventName, final String data) {
-                HomeActivity.this.runOnUiThread(new Runnable() {
+                getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        Toast.makeText(HomeActivity.this,
+                        Toast.makeText(getContext(),
                                 "Nouveau message! :)", Toast.LENGTH_SHORT).show();
                     }
                 });

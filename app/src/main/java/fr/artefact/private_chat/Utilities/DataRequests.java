@@ -48,16 +48,16 @@ public class DataRequests {
                 try {
                     db.authResponseDao().insert(response.body());
                     Toast.makeText(context, "Authentification:" + response.isSuccessful(), Toast.LENGTH_SHORT).show();
-                    Intent login = new Intent(context, LoginActivity.class);
-                    context.startActivity(login);
+//                    Intent login = new Intent(context, LoginActivity.class);
+//                    context.startActivity(login);
 
                 } catch (Exception e) {
                     Toast.makeText(context, "Echec de l'authentification... :'(", Toast.LENGTH_SHORT).show();
-                    Intent login = new Intent(context, LoginActivity.class);
-                    context.startActivity(login);
+//                    Intent login = new Intent(context, LoginActivity.class);
+//                    context.startActivity(login);
                 }
-                Intent home = new Intent(context, HomeActivity.class);
-                context.startActivity(home);
+//                Intent home = new Intent(context, HomeActivity.class);
+//                context.startActivity(home);
             }
 
             @Override

@@ -3,18 +3,19 @@ package fr.artefact.private_chat.Activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
+import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,16 +26,16 @@ import fr.artefact.private_chat.Utilities.AppDatabase;
 import fr.artefact.private_chat.Utilities.DataRequests;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends Fragment {
 
     private UserLoginTask mAuthTask = null;
 
     // UI references.
-    private EditText mEmailView;
-    private EditText mPasswordView;
-    private EditText mServerUrlView;
-    private EditText mClientIdView;
-    private EditText mClientSecretView;
+    private TextInputEditText mEmailView;
+    private TextInputEditText mPasswordView;
+    private TextInputEditText mServerUrlView;
+    private TextInputEditText mClientIdView;
+    private TextInputEditText mClientSecretView;
 
     private View mProgressView;
     private View mLoginFormView;
@@ -43,19 +44,20 @@ public class LoginActivity extends AppCompatActivity {
     private Settings settings;
     private AppDatabase appDatabase;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
 
-        appDatabase = AppDatabase.getAppDatabase(LoginActivity.this);
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//        return super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.activity_login, container, false);
+
+        appDatabase = AppDatabase.getAppDatabase(this.getActivity().getBaseContext());
         settingsDAO = appDatabase.settingsDao();
 
-        mEmailView = (EditText) findViewById(R.id.email);
+        mEmailView = view.findViewById(R.id.email);
         mEmailView.setText("benoitzuing@msn.com");
 
 
-        mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordView = view.findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -67,9 +69,9 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        mServerUrlView = (EditText) findViewById(R.id.serverUrl);
-        mClientIdView = (EditText) findViewById(R.id.clientId);
-        mClientSecretView = (EditText) findViewById(R.id.clientSecret);
+        mServerUrlView = view.findViewById(R.id.serverUrl);
+        mClientIdView = view.findViewById(R.id.clientId);
+        mClientSecretView = view.findViewById(R.id.clientSecret);
 
         try {
             settings = settingsDAO.getWithId(1);
@@ -87,14 +89,14 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        Button mEmailSignInButton = view.findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (saveSettings()) {
                 attemptLogin();
                 } else {
-                    Toast.makeText(LoginActivity.this,
+                    Toast.makeText(LoginActivity.this.getActivity(),
                             "Erreur",
                             Toast.LENGTH_LONG
                     ).show();
@@ -102,8 +104,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+        mLoginFormView = view.findViewById(R.id.login_form);
+        mProgressView = view.findViewById(R.id.login_progress);
+
+        return view;
+
     }
 
     private Boolean saveSettings () {
@@ -122,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
             status = true;
 
         } catch (Exception e) {
-            Toast.makeText(LoginActivity.this,
+            Toast.makeText(this.getContext(),
                     "Erreur: " + e.toString(),
                     Toast.LENGTH_LONG
             ).show();
@@ -199,14 +204,12 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-                DataRequests.fetchAuthResponse(LoginActivity.this);
+                DataRequests.fetchAuthResponse(LoginActivity.this.getContext());
             } catch (final Exception e) {
-                LoginActivity.this.runOnUiThread(new Runnable() {
+                LoginActivity.this.getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(LoginActivity.this, "Erreur d'authentification :'(", Toast.LENGTH_SHORT).show();
-                        Intent login = new Intent(LoginActivity.this, LoginActivity.class);
-                        startActivity(login);
+                        Toast.makeText(LoginActivity.this.getActivity(), "Erreur d'authentification :'(", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
