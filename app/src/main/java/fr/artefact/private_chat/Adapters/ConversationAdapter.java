@@ -50,6 +50,9 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
 
     @Override
     public int getItemCount() {
+        if (dataSet == null) {
+            return 0;
+        }
         return dataSet.size();
     }
 

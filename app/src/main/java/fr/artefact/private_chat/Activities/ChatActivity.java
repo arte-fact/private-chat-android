@@ -23,7 +23,7 @@ import fr.artefact.private_chat.Utilities.AppDatabase;
 import fr.artefact.private_chat.Utilities.DataRequests;
 import fr.artefact.private_chat.Utilities.PusherClient;
 
-public class MessageActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity {
 
     RecyclerView mRecyclerView;
     MessageAdapter mAdapter;
@@ -71,7 +71,7 @@ public class MessageActivity extends AppCompatActivity {
     private void setRecyclerView(List<Message> messages) {
         mRecyclerView = findViewById(R.id.message_recycler_view);
 
-        mLayoutManager = new LinearLayoutManager(MessageActivity.this);
+        mLayoutManager = new LinearLayoutManager(ChatActivity.this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         mAdapter = new MessageAdapter(messages);
@@ -93,7 +93,7 @@ public class MessageActivity extends AppCompatActivity {
                 message.setText(text);
                 message.setConversationId(conversationId);
 
-                DataRequests.sendMessage(token, MessageActivity.this, message);
+                DataRequests.sendMessage(token, ChatActivity.this, message);
             }
         });
     }
@@ -105,7 +105,7 @@ public class MessageActivity extends AppCompatActivity {
             @Override
             public void onEvent(String channelName, String eventName, final String data) {
 
-                MessageActivity.this.runOnUiThread(new Runnable() {
+                ChatActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Gson gson = new Gson();

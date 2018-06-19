@@ -1,14 +1,18 @@
 package fr.artefact.private_chat.Utilities;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.pusher.client.Pusher;
 import com.pusher.client.PusherOptions;
+import com.pusher.client.channel.Channel;
+import com.pusher.client.channel.SubscriptionEventListener;
 import com.pusher.client.connection.ConnectionEventListener;
 import com.pusher.client.connection.ConnectionState;
 import com.pusher.client.connection.ConnectionStateChange;
 
 import fr.artefact.private_chat.Adapters.MessageAdapter;
+import fr.artefact.private_chat.Models.Conversation;
 
 public class PusherClient {
 
@@ -39,5 +43,20 @@ public class PusherClient {
 
     public Pusher getPusher() {
         return pusher;
+    }
+
+    public void subscribeChannel(int conversationId) {
+        Channel channel = this.getPusher().subscribe("conversation-channel." + conversationId);
+
+        channel.bind("App\\Events\\MessageCreatedEvent", new SubscriptionEventListener() {
+            @Override
+            public void onEvent(String channelName, String eventName, final String data) {
+
+            }
+        });
+    }
+
+    public void unSubscribeChannel(int conversationId) {
+        this.getPusher().unsubscribe("conversation-channel." + conversationId);
     }
 }

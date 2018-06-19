@@ -1,4 +1,4 @@
-package fr.artefact.private_chat.Activities;
+package fr.artefact.private_chat.Fragments;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -26,7 +26,7 @@ import fr.artefact.private_chat.Utilities.AppDatabase;
 import fr.artefact.private_chat.Utilities.DataRequests;
 
 
-public class LoginActivity extends Fragment {
+public class SettingsFragment extends Fragment {
 
     private UserLoginTask mAuthTask = null;
 
@@ -96,7 +96,7 @@ public class LoginActivity extends Fragment {
                 if (saveSettings()) {
                 attemptLogin();
                 } else {
-                    Toast.makeText(LoginActivity.this.getActivity(),
+                    Toast.makeText(SettingsFragment.this.getActivity(),
                             "Erreur",
                             Toast.LENGTH_LONG
                     ).show();
@@ -204,12 +204,12 @@ public class LoginActivity extends Fragment {
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-                DataRequests.fetchAuthResponse(LoginActivity.this.getContext());
+                DataRequests.fetchAuthResponse(SettingsFragment.this.getContext());
             } catch (final Exception e) {
-                LoginActivity.this.getActivity().runOnUiThread(new Runnable() {
+                SettingsFragment.this.getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(LoginActivity.this.getActivity(), "Erreur d'authentification :'(", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SettingsFragment.this.getActivity(), "Erreur d'authentification :'(", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
