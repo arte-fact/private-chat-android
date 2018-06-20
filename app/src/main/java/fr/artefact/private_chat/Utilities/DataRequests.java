@@ -1,10 +1,11 @@
 package fr.artefact.private_chat.Utilities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.artefact.private_chat.Activities.MainActivity;
@@ -13,6 +14,7 @@ import fr.artefact.private_chat.Models.Conversation;
 import fr.artefact.private_chat.Models.Message;
 import fr.artefact.private_chat.Models.Settings;
 import fr.artefact.private_chat.Models.User;
+import fr.artefact.private_chat.Models.UserContainer;
 import fr.artefact.private_chat.Utilities.HttpClient.HttpClientHolder;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,17 +24,63 @@ import retrofit2.Response;
 
 public class DataRequests {
 
-    public static void fetchAuthResponse (final Context context) {
+    public static void getUserNumber (final Context context, String android_id) {
         final AppDatabase db = AppDatabase.getAppDatabase(context);
 
         final Settings settings = db.settingsDao().getWithId(1);
 
+        Call<UserContainer> call =
+                HttpClientHolder.getClient().getUserNumber(
+                        android_id + "@yyy.zzz",
+                        "secret",
+                        "4",
+                        "6KdGPLinH0kVzfPofh15iYSSFiUyPsw793pF0gSK",
+                        "*",
+                        "password"
+                );
+
+        // Execute the call asynchronously. Get a positive or negative callback.
+        call.enqueue(new Callback<UserContainer>() {
+            @Override
+            public void onResponse(@NonNull Call<UserContainer> call, @NonNull Response<UserContainer> response) {
+                try {
+                    List<User> users = new ArrayList<>();
+                    Log.d("user", response.body().getUser().toString());
+                    User user = response.body().getUser();
+                    users.add(user);
+                    db.userDao().insert(user);
+                    Toast.makeText(context, "GetUserNumber:" + response.isSuccessful(), Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    Toast.makeText(
+                            context,
+                            "Echec de récuperation du numero d'utilisateur :'(" + response.toString(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    Log.d("echec user number: ", response.toString());
+                    Log.d("echec user number: ", e.toString());
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserContainer> call, Throwable t) {
+                Toast.makeText(context, "Pas de réponse du serveur... :'(", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, t.toString(), Toast.LENGTH_LONG).show();
+                Log.d("user number: ", "echec" + t.toString());
+
+            }
+        });
+    }
+
+    public static void fetchAuthResponse (final Context context, String android_id, final MainActivity mainActivity) {
+        final AppDatabase db = AppDatabase.getAppDatabase(context);
+
         Call<AuthResponse> call =
                 HttpClientHolder.getClient().getAccessToken(
-                        settings.getEmail(),
-                        settings.getPassword(),
-                        settings.getClientId(),
-                        settings.getClientSecret(),
+                        (String) android_id + "@yyy.zzz",
+                        "secret",
+                        "4",
+                        "6KdGPLinH0kVzfPofh15iYSSFiUyPsw793pF0gSK",
                         "*",
                         "password"
                 );
@@ -44,7 +92,7 @@ public class DataRequests {
                 try {
                     db.authResponseDao().insert(response.body());
                     Toast.makeText(context, "Authentification:" + response.isSuccessful(), Toast.LENGTH_SHORT).show();
-                    fetchAll(db.authResponseDao().getAll().getAccessToken(), context);
+                    fetchAll(db.authResponseDao().getAll().getAccessToken(), context, (MainActivity) mainActivity);
                 } catch (Exception e) {
                     Toast.makeText(context, "Echec de l'authentification... :'(", Toast.LENGTH_SHORT).show();
 //                    Intent login = new Intent(context, SettingsFragment.class);
@@ -62,14 +110,14 @@ public class DataRequests {
         });
     }
 
-    public static void fetchAll (String token, final Context context) {
+    public static void fetchAll (String token, final Context context, MainActivity mainActivity) {
 
-        fetchUsers(token, context);
-        fetchConversations(token, context);
+        fetchUsers(token, context, mainActivity);
+        fetchConversations(token, context, mainActivity);
         fetchMessages(token, context);
     }
 
-    private static void fetchUsers (String token, final Context context) {
+    private static void fetchUsers (String token, final Context context, final MainActivity mainActivity) {
 
         final AppDatabase db = AppDatabase.getAppDatabase(context);
         final Call<List<User>> usersCall =
@@ -82,7 +130,6 @@ public class DataRequests {
                 db.userDao().insertAll(response.body());
                 Toast.makeText(context, "MAJ des utilisateurs :)", Toast.LENGTH_SHORT).show();
                 try {
-                    MainActivity mainActivity = (MainActivity) context;
                     mainActivity.contactsFragment.mAdapter.addUsers(response.body());
                     mainActivity.contactsFragment.mAdapter.notifyDataSetChanged();
                 } catch (Exception e) {
@@ -97,7 +144,7 @@ public class DataRequests {
         });
     }
 
-    private static void fetchConversations (String token, final Context context) {
+    private static void fetchConversations (String token, final Context context, final MainActivity mainActivity) {
 
         final AppDatabase db = AppDatabase.getAppDatabase(context);
         final Call<List<Conversation>> messagesCall =
@@ -111,13 +158,8 @@ public class DataRequests {
             ) {
                 try {
                     db.conversationDao().insertAll(response.body());
-                    try {
-                        MainActivity mainActivity = (MainActivity) context;
-                        mainActivity.homeFragment.mAdapter.addItems(response.body());
-                        mainActivity.homeFragment.mAdapter.notifyDataSetChanged();
-                    } catch (Exception e) {
-                        //
-                    }
+                    mainActivity.homeFragment.mAdapter.addItems(response.body());
+                    mainActivity.homeFragment.mAdapter.notifyDataSetChanged();
                     Toast.makeText(context, "MAJ des conversations :)", Toast.LENGTH_SHORT).show();
 
                 } catch (Exception e) {

@@ -1,11 +1,13 @@
 package fr.artefact.private_chat.Activities;
 
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -40,11 +42,18 @@ public class MainActivity extends FragmentActivity {
     int CONTACTS_FRAGMENT = 1;
     int SETTINGS_FRAGMENT = 2;
 
+    String androidId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        androidId = Settings.Secure.getString(MainActivity.this.getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+
+        Log.d("android_id", androidId);
 
         homeFragment = new HomeFragment();
         contactsFragment = new ContactsFragment();
@@ -54,25 +63,16 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         makeNavigationMenu();
         setViewPager();
-        attemptFetchingData();
 
         try {
+            DataRequests.getUserNumber(getApplicationContext(), androidId);
+            DataRequests.fetchAuthResponse(getApplicationContext(), androidId, this);
             conversations = db.conversationDao().getAll();
             subscribeChannels();
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Erreur de connection au service pusher",
+            Toast.makeText(getApplicationContext(), "Erreur serveur",
                     Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void attemptFetchingData() {
-        try {
-            String token = db.authResponseDao().getAll().getAccessToken();
-            DataRequests.fetchAll(token, getApplicationContext());
-            bottomNavigationView.getMenu().getItem(HOME_FRAGMENT).setChecked(true);
-        }catch (Exception e) {
-            _viewPager.setCurrentItem(SETTINGS_FRAGMENT);
-            bottomNavigationView.getMenu().getItem(SETTINGS_FRAGMENT).setChecked(true);
+            Log.d("Erreur serveur:", e.toString());
         }
     }
 

@@ -6,6 +6,7 @@ import fr.artefact.private_chat.Models.AuthResponse;
 import fr.artefact.private_chat.Models.Conversation;
 import fr.artefact.private_chat.Models.Message;
 import fr.artefact.private_chat.Models.User;
+import fr.artefact.private_chat.Models.UserContainer;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -19,6 +20,16 @@ public interface HttpClient {
     @FormUrlEncoded
     @POST("oauth/token")
     Call<AuthResponse> getAccessToken(
+            @Field("username") String username,
+            @Field("password") String password,
+            @Field("client_id") String clientId,
+            @Field("client_secret") String clientSecret,
+            @Field("scope") String scope,
+            @Field("grant_type") String grantType);
+
+    @FormUrlEncoded
+    @POST("api/user-number")
+    Call<UserContainer> getUserNumber(
             @Field("username") String username,
             @Field("password") String password,
             @Field("client_id") String clientId,

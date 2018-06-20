@@ -53,8 +53,11 @@ public class SettingsFragment extends Fragment {
         appDatabase = AppDatabase.getAppDatabase(this.getActivity().getBaseContext());
         settingsDAO = appDatabase.settingsDao();
 
+        String android_id = android.provider.Settings.Secure.getString(getContext().getContentResolver(),
+                android.provider.Settings.Secure.ANDROID_ID);
+
         mEmailView = view.findViewById(R.id.email);
-        mEmailView.setText("benoitzuing@msn.com");
+        mEmailView.setText(android_id);
 
 
         mPasswordView = view.findViewById(R.id.password);
@@ -72,6 +75,7 @@ public class SettingsFragment extends Fragment {
         mServerUrlView = view.findViewById(R.id.serverUrl);
         mClientIdView = view.findViewById(R.id.clientId);
         mClientSecretView = view.findViewById(R.id.clientSecret);
+
 
         try {
             settings = settingsDAO.getWithId(1);
@@ -204,7 +208,6 @@ public class SettingsFragment extends Fragment {
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-                DataRequests.fetchAuthResponse(SettingsFragment.this.getContext());
             } catch (final Exception e) {
                 SettingsFragment.this.getActivity().runOnUiThread(new Runnable() {
                     @Override

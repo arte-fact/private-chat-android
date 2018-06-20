@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HttpClientHolder {
 
-    static String API_BASE_URL = "http://the-emperors.gotgeeks.com/";
+    static String API_BASE_URL = "http://10.0.2.2:8000/";
 
     static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 

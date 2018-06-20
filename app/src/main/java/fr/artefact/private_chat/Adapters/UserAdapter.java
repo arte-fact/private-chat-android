@@ -59,4 +59,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>  {
     public void addUsers(List<User> users) {
         dataSet = users;
     }
+
+    public void addUser(User user) {
+        dataSet.add(user);
+    }
 }

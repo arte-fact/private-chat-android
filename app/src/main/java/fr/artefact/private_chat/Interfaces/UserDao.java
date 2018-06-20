@@ -5,6 +5,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import java.util.List;
 
+import fr.artefact.private_chat.Models.Message;
 import fr.artefact.private_chat.Models.User;
 
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
@@ -16,4 +17,11 @@ public interface UserDao {
 
     @Insert (onConflict = REPLACE)
     void insertAll(List<User> users);
+
+    @Insert (onConflict = REPLACE)
+    void insert(User user);
+
+
+    @Query("SELECT * FROM user WHERE id = :id")
+    User get(int id);
 }
