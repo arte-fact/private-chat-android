@@ -1,20 +1,23 @@
 package fr.artefact.private_chat.Utilities;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import fr.artefact.private_chat.Activities.ChatActivity;
 import fr.artefact.private_chat.Activities.MainActivity;
 import fr.artefact.private_chat.Models.AuthResponse;
 import fr.artefact.private_chat.Models.Conversation;
 import fr.artefact.private_chat.Models.Message;
+import fr.artefact.private_chat.Models.ModelContainers.ConversationContainer;
 import fr.artefact.private_chat.Models.Settings;
 import fr.artefact.private_chat.Models.User;
-import fr.artefact.private_chat.Models.UserContainer;
+import fr.artefact.private_chat.Models.ModelContainers.UserContainer;
 import fr.artefact.private_chat.Utilities.HttpClient.HttpClientHolder;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,8 +36,8 @@ public class DataRequests {
                 HttpClientHolder.getClient().getUserNumber(
                         android_id + "@yyy.zzz",
                         "secret",
-                        "4",
-                        "6KdGPLinH0kVzfPofh15iYSSFiUyPsw793pF0gSK",
+                        "2",
+                        "UwcOBEVIKf3Ob8Hc1chjRPIQLZpfcRVcvV9hvglM",
                         "*",
                         "password"
                 );
@@ -44,12 +47,7 @@ public class DataRequests {
             @Override
             public void onResponse(@NonNull Call<UserContainer> call, @NonNull Response<UserContainer> response) {
                 try {
-                    List<User> users = new ArrayList<>();
-                    Log.d("user", response.body().getUser().toString());
-                    User user = response.body().getUser();
-                    users.add(user);
-                    db.userDao().insert(user);
-                    Toast.makeText(context, "GetUserNumber:" + response.isSuccessful(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Votre numéro d'utilisateur: " + response.body().getUser().getName(), Toast.LENGTH_LONG).show();
                 } catch (Exception e) {
                     Toast.makeText(
                             context,
@@ -79,8 +77,8 @@ public class DataRequests {
                 HttpClientHolder.getClient().getAccessToken(
                         (String) android_id + "@yyy.zzz",
                         "secret",
-                        "4",
-                        "6KdGPLinH0kVzfPofh15iYSSFiUyPsw793pF0gSK",
+                        "2",
+                        "UwcOBEVIKf3Ob8Hc1chjRPIQLZpfcRVcvV9hvglM",
                         "*",
                         "password"
                 );
@@ -92,14 +90,11 @@ public class DataRequests {
                 try {
                     db.authResponseDao().insert(response.body());
                     Toast.makeText(context, "Authentification:" + response.isSuccessful(), Toast.LENGTH_SHORT).show();
-                    fetchAll(db.authResponseDao().getAll().getAccessToken(), context, (MainActivity) mainActivity);
+                    fetchAll(response.body().getAccessToken(), context, (MainActivity) mainActivity);
                 } catch (Exception e) {
                     Toast.makeText(context, "Echec de l'authentification... :'(", Toast.LENGTH_SHORT).show();
-//                    Intent login = new Intent(context, SettingsFragment.class);
-//                    context.startActivity(login);
+
                 }
-//                Intent home = new Intent(context, HomeFragment.class);
-//                context.startActivity(home);
             }
 
             @Override
@@ -128,7 +123,6 @@ public class DataRequests {
             @Override
             public void onResponse(@NonNull Call<List<User>> call,@NonNull Response<List<User>> response) {
                 db.userDao().insertAll(response.body());
-                Toast.makeText(context, "MAJ des utilisateurs :)", Toast.LENGTH_SHORT).show();
                 try {
                     mainActivity.contactsFragment.mAdapter.addUsers(response.body());
                     mainActivity.contactsFragment.mAdapter.notifyDataSetChanged();
@@ -147,28 +141,28 @@ public class DataRequests {
     private static void fetchConversations (String token, final Context context, final MainActivity mainActivity) {
 
         final AppDatabase db = AppDatabase.getAppDatabase(context);
-        final Call<List<Conversation>> messagesCall =
+        final Call<ConversationContainer> messagesCall =
                 HttpClientHolder.getClient().getConversations("Bearer " + token);
 
-        messagesCall.enqueue(new Callback<List<Conversation>>() {
+        messagesCall.enqueue(new Callback<ConversationContainer>() {
             @Override
             public void onResponse(
-                    @NonNull Call<List<Conversation>> call,
-                    @NonNull Response<List<Conversation>> response
+                    @NonNull Call<ConversationContainer> call,
+                    @NonNull Response<ConversationContainer> response
             ) {
                 try {
-                    db.conversationDao().insertAll(response.body());
-                    mainActivity.homeFragment.mAdapter.addItems(response.body());
+                    db.conversationDao().insertAll(response.body().getConversation());
+                    mainActivity.homeFragment.mAdapter.addItems(response.body().getConversation());
                     mainActivity.homeFragment.mAdapter.notifyDataSetChanged();
-                    Toast.makeText(context, "MAJ des conversations :)", Toast.LENGTH_SHORT).show();
 
                 } catch (Exception e) {
-                    Toast.makeText(context, "Erreur serveur :'(", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Erreur serveur :'( " + e.toString() , Toast.LENGTH_SHORT).show();
+                    Log.d("Erreur: ", e.toString());
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<Conversation>> call,  @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ConversationContainer> call,  @NonNull Throwable t) {
                 Toast.makeText(
                         context,
                         "Pas de réponse du serveur... :'(",
@@ -178,7 +172,7 @@ public class DataRequests {
         });
     }
 
-    private static void fetchMessages (String token, final Context context) {
+    public static void fetchMessages (String token, final Context context) {
 
         final AppDatabase db = AppDatabase.getAppDatabase(context);
         final Call<List<Message>> messagesCall =
@@ -192,7 +186,6 @@ public class DataRequests {
                     @NonNull Response<List<Message>> response) {
                 try {
                     db.messageDao().insertAll(response.body());
-                    Toast.makeText(context, "MAJ des messages :)", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     Toast.makeText(context, "Erreur serveur :'(", Toast.LENGTH_SHORT).show();
                 }
@@ -215,6 +208,42 @@ public class DataRequests {
             }
             @Override
             public void onFailure(@NonNull Call<Message> call, @NonNull Throwable t) {
+                Toast.makeText(
+                        context,
+                        "Pas de réponse du serveur... :'(",
+                        Toast.LENGTH_SHORT
+                ).show();
+            }
+        });
+    }
+
+    public static void createConversation (String token, final Context context, int user_id, final MainActivity mainActivity) {
+        final Call<Conversation> messageCall =
+                HttpClientHolder.getClient().postConversation("Bearer " + token, user_id);
+
+        messageCall.enqueue(new Callback<Conversation>() {
+            @Override
+            public void onResponse(@NonNull Call<Conversation> call,@NonNull Response<Conversation> response) {
+                try {
+                    Conversation conversation = response.body();
+                    AppDatabase db = AppDatabase.getAppDatabase(context);
+                    db.conversationDao().insert(conversation);
+                    mainActivity.homeFragment.mAdapter.addItem(conversation);
+                    Intent chatActivity = new Intent(context, ChatActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("conversation_id", conversation.getId());
+                    chatActivity.putExtras(bundle);
+                    context.startActivity(chatActivity, bundle);
+                } catch (Exception e) {
+                    Toast.makeText(
+                            context,
+                            "conversation erreur " + e.toString(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<Conversation> call, @NonNull Throwable t) {
                 Toast.makeText(
                         context,
                         "Pas de réponse du serveur... :'(",

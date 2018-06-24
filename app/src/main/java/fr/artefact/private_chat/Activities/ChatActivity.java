@@ -17,7 +17,7 @@ import java.util.List;
 
 import fr.artefact.private_chat.Adapters.MessageAdapter;
 import fr.artefact.private_chat.Models.Message;
-import fr.artefact.private_chat.Models.MessageContainer;
+import fr.artefact.private_chat.Models.ModelContainers.MessageContainer;
 import fr.artefact.private_chat.R;
 import fr.artefact.private_chat.Utilities.AppDatabase;
 import fr.artefact.private_chat.Utilities.DataRequests;
@@ -30,6 +30,7 @@ public class ChatActivity extends AppCompatActivity {
     RecyclerView.LayoutManager mLayoutManager;
     int conversationId;
     PusherClient pusherClient;
+    AppDatabase db;
 
     @Override
     protected void onCreate(android.os.Bundle savedInstanceState) {
@@ -38,19 +39,16 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_message);
         conversationId = options.getInt("conversation_id");
 
+        db = AppDatabase.getAppDatabase(getBaseContext());
+        final String token =db.authResponseDao().getAll().getAccessToken();
 
-        final String token = AppDatabase.getAppDatabase(getApplicationContext())
-                .authResponseDao().getAll().getAccessToken();
-
-        final List<Message> messages =
-                AppDatabase.getAppDatabase(getApplicationContext()).messageDao()
-                        .getConversationMessages(conversationId);
-
+        final List<Message> messages = db.messageDao().getConversationMessages(conversationId);
 
         setRecyclerView(messages);
-        subscribeChannel(conversationId);
         setButton(token);
         setKeyboardObserver();
+        DataRequests.fetchMessages(db.authResponseDao().getAll().getAccessToken(), getApplicationContext());
+        subscribeChannel(conversationId);
     }
 
     @Override

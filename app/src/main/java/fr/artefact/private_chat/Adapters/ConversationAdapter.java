@@ -61,8 +61,8 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         notifyDataSetChanged();
     }
 
-    public void addItem(Conversation message) {
-        this.dataSet.add(message);
+    public void addItem(Conversation conversation) {
+        this.dataSet.add(conversation);
         notifyDataSetChanged();
     }
 }

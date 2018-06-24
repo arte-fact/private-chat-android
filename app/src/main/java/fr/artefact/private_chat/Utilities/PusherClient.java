@@ -1,8 +1,10 @@
 package fr.artefact.private_chat.Utilities;
 
+import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.pusher.client.Pusher;
 import com.pusher.client.PusherOptions;
 import com.pusher.client.channel.Channel;
@@ -11,8 +13,11 @@ import com.pusher.client.connection.ConnectionEventListener;
 import com.pusher.client.connection.ConnectionState;
 import com.pusher.client.connection.ConnectionStateChange;
 
+import fr.artefact.private_chat.Activities.MainActivity;
 import fr.artefact.private_chat.Adapters.MessageAdapter;
 import fr.artefact.private_chat.Models.Conversation;
+import fr.artefact.private_chat.Models.Message;
+import fr.artefact.private_chat.Models.ModelContainers.MessageContainer;
 
 public class PusherClient {
 
@@ -45,13 +50,15 @@ public class PusherClient {
         return pusher;
     }
 
-    public void subscribeChannel(int conversationId) {
+    public void subscribeChannel(int conversationId, final Context context) {
         Channel channel = this.getPusher().subscribe("conversation-channel." + conversationId);
 
         channel.bind("App\\Events\\MessageCreatedEvent", new SubscriptionEventListener() {
             @Override
             public void onEvent(String channelName, String eventName, final String data) {
-
+                Gson gson = new Gson();
+                MessageContainer messageContainer = gson.fromJson(data, MessageContainer.class);
+                Message message = messageContainer.getMessage();
             }
         });
     }

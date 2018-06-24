@@ -21,7 +21,6 @@ public interface UserDao {
     @Insert (onConflict = REPLACE)
     void insert(User user);
 
-
     @Query("SELECT * FROM user WHERE id = :id")
     User get(int id);
 }

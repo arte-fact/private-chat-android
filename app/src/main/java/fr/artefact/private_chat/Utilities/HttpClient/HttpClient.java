@@ -5,8 +5,9 @@ import java.util.List;
 import fr.artefact.private_chat.Models.AuthResponse;
 import fr.artefact.private_chat.Models.Conversation;
 import fr.artefact.private_chat.Models.Message;
+import fr.artefact.private_chat.Models.ModelContainers.ConversationContainer;
 import fr.artefact.private_chat.Models.User;
-import fr.artefact.private_chat.Models.UserContainer;
+import fr.artefact.private_chat.Models.ModelContainers.UserContainer;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -44,11 +45,17 @@ public interface HttpClient {
     Call<List<Message>> getMessages(@Header("authorization") String token);
 
     @GET("api/conversations")
-    Call<List<Conversation>> getConversations(@Header("authorization") String token);
+    Call<ConversationContainer> getConversations(@Header("authorization") String token);
 
     @POST("api/messages")
     Call<Message> postMessage(
             @Header("authorization") String token,
             @Body Message message
+            );
+
+    @POST("api/conversations")
+    Call<Conversation> postConversation(
+            @Header("authorization") String token,
+            @Body int user_id
             );
 }

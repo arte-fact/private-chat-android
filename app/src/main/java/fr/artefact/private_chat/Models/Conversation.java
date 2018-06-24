@@ -23,15 +23,11 @@ public class Conversation {
 
     @SerializedName("created_at")
     @Expose
-    private Integer createdAt;
+    private String createdAt;
 
     @SerializedName("updated_at")
     @Expose
-    private Integer updatedAt;
-
-    @SerializedName("message")
-    @Ignore
-    private List<Message> message;
+    private String updatedAt;
 
     public Integer getId() {
         return id;
@@ -49,21 +45,19 @@ public class Conversation {
         this.name = name;
     }
 
-    public Integer getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Integer createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Integer getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Integer updatedAt) {
+    public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
-
-    public List<Message> getMessages() { return message; }
 }

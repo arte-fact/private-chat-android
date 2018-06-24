@@ -61,7 +61,7 @@ public class HomeFragment extends Fragment {
                                 Bundle bundle = new Bundle();
                                 bundle.putInt("conversation_id", db.conversationDao().getAll().get(position).getId());
                                 message.putExtras(bundle);
-                                getActivity().startActivity(message, bundle);
+                                getContext().startActivity(message, bundle);
                             }
 
                             @Override public void onLongItemClick(View view, int position) {

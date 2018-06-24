@@ -17,4 +17,7 @@ public interface ConversationDao {
 
     @Insert (onConflict = REPLACE)
     void insertAll(List<Conversation> conversations);
+
+    @Insert (onConflict = REPLACE)
+    void insert(Conversation conversation);
 }

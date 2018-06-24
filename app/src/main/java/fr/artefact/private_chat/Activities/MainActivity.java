@@ -76,6 +76,12 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unSubscribeChannels();
+    }
+
     private void setViewPager() {
         // Add each fragment to our list.
         _fragments = new ArrayList<>();
@@ -131,16 +137,20 @@ public class MainActivity extends FragmentActivity {
     }
 
     protected void subscribeChannels() {
+
         pusherClient = new PusherClient();
+        List<Conversation> conversations = db.conversationDao().getAll();
 
         for (Conversation conversation: conversations) {
-            pusherClient.subscribeChannel(conversation.getId());
+            pusherClient.subscribeChannel(conversation.getId(), getApplicationContext());
         }
     }
 
     void unSubscribeChannels() {
+
+        List<Conversation> conversations = db.conversationDao().getAll();
+
         for (Conversation conversation: conversations) {
-            List<Conversation> conversations = db.conversationDao().getAll();
             pusherClient.unSubscribeChannel(conversation.getId());
         }
     }

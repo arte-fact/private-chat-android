@@ -16,7 +16,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name="fr.artefact.private_chat.Activities.ChatActivity"
+            android:label="Home"
+            android:theme="@style/AppTheme" />
         <receiver android:name=".Utilities.DialListener">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SECRET_CODE" />
