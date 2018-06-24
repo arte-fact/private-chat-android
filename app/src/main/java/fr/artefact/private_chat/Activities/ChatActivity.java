@@ -25,12 +25,12 @@ import fr.artefact.private_chat.Utilities.PusherClient;
 
 public class ChatActivity extends AppCompatActivity {
 
-    RecyclerView mRecyclerView;
-    MessageAdapter mAdapter;
-    RecyclerView.LayoutManager mLayoutManager;
-    int conversationId;
-    PusherClient pusherClient;
-    AppDatabase db;
+    private RecyclerView mRecyclerView;
+    private MessageAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private int conversationId;
+    private PusherClient pusherClient;
+    private AppDatabase db;
 
     @Override
     protected void onCreate(android.os.Bundle savedInstanceState) {

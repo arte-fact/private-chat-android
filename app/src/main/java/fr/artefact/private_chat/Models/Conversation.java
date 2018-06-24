@@ -1,13 +1,10 @@
 package fr.artefact.private_chat.Models;
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import java.util.List;
 
 @Entity(tableName = "conversation")
 public class Conversation {

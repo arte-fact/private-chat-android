@@ -2,6 +2,7 @@ package fr.artefact.private_chat.Activities;
 
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -25,24 +26,24 @@ import fr.artefact.private_chat.Utilities.PusherClient;
 
 public class MainActivity extends FragmentActivity {
 
-    BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener;
-    BottomNavigationView bottomNavigationView;
-    FragmentPagerAdapter _fragmentPagerAdapter;
-    ViewPager _viewPager;
-    List<Fragment> _fragments;
-    AppDatabase db;
-    PusherClient pusherClient;
-    List<Conversation> conversations;
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener;
+    private BottomNavigationView bottomNavigationView;
+    private FragmentPagerAdapter _fragmentPagerAdapter;
+    private ViewPager _viewPager;
+    private List<Fragment> _fragments;
+    private AppDatabase db;
+    private PusherClient pusherClient;
+    private List<Conversation> conversations;
 
     public HomeFragment homeFragment;
     public ContactsFragment contactsFragment;
-    public SettingsFragment settingsFragment;
+    private SettingsFragment settingsFragment;
 
-    int HOME_FRAGMENT = 0;
-    int CONTACTS_FRAGMENT = 1;
-    int SETTINGS_FRAGMENT = 2;
+    private final int HOME_FRAGMENT = 0;
+    private final int CONTACTS_FRAGMENT = 1;
+    private final int SETTINGS_FRAGMENT = 2;
 
-    String androidId;
+    private String androidId;
 
 
     @Override
@@ -103,11 +104,11 @@ public class MainActivity extends FragmentActivity {
         };
 
 
-        this._viewPager = (ViewPager) this.findViewById(R.id.main_view_pager);
+        this._viewPager = this.findViewById(R.id.main_view_pager);
         this._viewPager.setAdapter(this._fragmentPagerAdapter);
     }
 
-    public void openFragment(final int fragment) {
+    private void openFragment(final int fragment) {
         this._viewPager.setCurrentItem(fragment);
     }
 
@@ -116,7 +117,7 @@ public class MainActivity extends FragmentActivity {
                 = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
             @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
                         openFragment(HOME_FRAGMENT);
@@ -131,12 +132,12 @@ public class MainActivity extends FragmentActivity {
                 return false;
             }
         };
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.main_bottom_navigation);
+        bottomNavigationView = findViewById(R.id.main_bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
     }
 
-    protected void subscribeChannels() {
+    private void subscribeChannels() {
 
         pusherClient = new PusherClient();
         List<Conversation> conversations = db.conversationDao().getAll();
@@ -146,7 +147,7 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
-    void unSubscribeChannels() {
+    private void unSubscribeChannels() {
 
         List<Conversation> conversations = db.conversationDao().getAll();
 
@@ -163,9 +164,10 @@ public class MainActivity extends FragmentActivity {
         return contactsFragment;
     }
 }
-// TODO: 17/06/18 Organiser systeme de login
-// TODO: 17/06/18 deconnection, register 
-// TODO: 17/06/18 activité parametre de connection telecharge les clés d'api en attaquant une route url mdp 
+
+
+// TODO: 24/06/18 service worker pour les notifications
+// TODO: 24/06/18 ajouter et renommer un contact
 // TODO: 17/06/18 Sauvegarder données utilisateur
 // TODO: 17/06/18 Creer activité utilisateur pour pouvoir creer des conversation et des amitiés
 // TODO: 17/06/18 styliser les vues de message 

@@ -75,7 +75,7 @@ public class DataRequests {
 
         Call<AuthResponse> call =
                 HttpClientHolder.getClient().getAccessToken(
-                        (String) android_id + "@yyy.zzz",
+                         android_id + "@yyy.zzz",
                         "secret",
                         "2",
                         "UwcOBEVIKf3Ob8Hc1chjRPIQLZpfcRVcvV9hvglM",
@@ -90,7 +90,7 @@ public class DataRequests {
                 try {
                     db.authResponseDao().insert(response.body());
                     Toast.makeText(context, "Authentification:" + response.isSuccessful(), Toast.LENGTH_SHORT).show();
-                    fetchAll(response.body().getAccessToken(), context, (MainActivity) mainActivity);
+                    fetchAll(response.body().getAccessToken(), context, mainActivity);
                 } catch (Exception e) {
                     Toast.makeText(context, "Echec de l'authentification... :'(", Toast.LENGTH_SHORT).show();
 
@@ -98,14 +98,14 @@ public class DataRequests {
             }
 
             @Override
-            public void onFailure(Call<AuthResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<AuthResponse> call, Throwable t) {
                 Toast.makeText(context, "Pas de réponse du serveur... :'(", Toast.LENGTH_SHORT).show();
                 Toast.makeText(context, t.toString(), Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    public static void fetchAll (String token, final Context context, MainActivity mainActivity) {
+    private static void fetchAll (String token, final Context context, MainActivity mainActivity) {
 
         fetchUsers(token, context, mainActivity);
         fetchConversations(token, context, mainActivity);

@@ -9,7 +9,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import fr.artefact.private_chat.Models.Conversation;
-import fr.artefact.private_chat.Models.Message;
 import fr.artefact.private_chat.R;
 
 public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ViewHolder>  {
@@ -17,14 +16,14 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     private List<Conversation> dataSet;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView mTextView;
+        private final TextView mTextView;
 
         private ViewHolder(TextView v) {
             super(v);
             mTextView = v;
         }
 
-        public void setData(Conversation conversation) {
+        void setData(Conversation conversation) {
             mTextView.setText(conversation.getName());
         }
     }

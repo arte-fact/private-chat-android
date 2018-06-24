@@ -5,7 +5,6 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import java.util.List;
 
-import fr.artefact.private_chat.Models.Message;
 import fr.artefact.private_chat.Models.User;
 
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;

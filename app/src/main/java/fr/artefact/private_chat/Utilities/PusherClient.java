@@ -2,7 +2,6 @@ package fr.artefact.private_chat.Utilities;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.pusher.client.Pusher;
@@ -13,23 +12,18 @@ import com.pusher.client.connection.ConnectionEventListener;
 import com.pusher.client.connection.ConnectionState;
 import com.pusher.client.connection.ConnectionStateChange;
 
-import fr.artefact.private_chat.Activities.MainActivity;
-import fr.artefact.private_chat.Adapters.MessageAdapter;
-import fr.artefact.private_chat.Models.Conversation;
 import fr.artefact.private_chat.Models.Message;
 import fr.artefact.private_chat.Models.ModelContainers.MessageContainer;
 
 public class PusherClient {
 
-    private Pusher pusher;
-    private PusherOptions options;
-
-    private String appCluster = "eu";
-    private String appKey= "a7460dcc066019b90756";
+    private final Pusher pusher;
 
 
     public PusherClient() {
-        options = new PusherOptions().setCluster(appCluster);
+        String appCluster = "eu";
+        PusherOptions options = new PusherOptions().setCluster(appCluster);
+        String appKey = "a7460dcc066019b90756";
         pusher = new Pusher(appKey, options);
         pusher.connect(new ConnectionEventListener() {
             @Override

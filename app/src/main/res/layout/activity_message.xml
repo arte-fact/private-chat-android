@@ -27,7 +27,6 @@
         app:layout_constraintRight_toRightOf="parent"/>
 
     <LinearLayout
-        android:id="@+id/layout_chatbox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -47,18 +46,20 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:maxLines="6"/>
+            android:maxLines="6"
+            android:inputType="" />
 
         <Button
             android:id="@+id/button_chatbox_send"
             android:text="SEND"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:background="@android:color/background_light"
             android:clickable="true"
             android:layout_width="64dp"
             android:layout_height="48dp"
             android:gravity="center"
-            android:layout_gravity="bottom" />
+            android:layout_gravity="bottom"
+            android:focusable="true" />
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import java.util.List;
 
 import fr.artefact.private_chat.Activities.MainActivity;
 import fr.artefact.private_chat.Adapters.UserAdapter;
-import fr.artefact.private_chat.Models.Conversation;
 import fr.artefact.private_chat.Models.User;
 import fr.artefact.private_chat.R;
 import fr.artefact.private_chat.Utilities.AppDatabase;
@@ -26,11 +24,11 @@ import fr.artefact.private_chat.Utilities.RecyclerItemOnClickListener;
 
 public class ContactsFragment extends Fragment {
 
-    RecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
     public UserAdapter mAdapter;
-    RecyclerView.LayoutManager mLayoutManager;
-    List<User> users;
-    AppDatabase db;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private List<User> users;
+    private AppDatabase db;
 
 
     @Nullable

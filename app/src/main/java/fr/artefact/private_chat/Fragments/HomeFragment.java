@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import fr.artefact.private_chat.Activities.ChatActivity;
@@ -24,11 +23,11 @@ import fr.artefact.private_chat.Utilities.RecyclerItemOnClickListener;
 
 public class HomeFragment extends Fragment {
 
-    RecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
     public ConversationAdapter mAdapter;
-    RecyclerView.LayoutManager mLayoutManager;
-    List<Conversation> conversations;
-    AppDatabase db;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private List<Conversation> conversations;
+    private AppDatabase db;
 
     @Nullable
     @Override
@@ -41,7 +40,7 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    public void setRecyclerView(List<Conversation> conversations) {
+    private void setRecyclerView(List<Conversation> conversations) {
 
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);

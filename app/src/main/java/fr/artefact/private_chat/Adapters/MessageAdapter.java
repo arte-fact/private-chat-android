@@ -17,14 +17,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public RecyclerView mRecyclerView;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView mTextView;
+        private final TextView mTextView;
 
         private ViewHolder(TextView v) {
             super(v);
             mTextView = v;
         }
 
-        public void setData(Message message) {
+        void setData(Message message) {
             mTextView.setText(message.getText());
         }
     }

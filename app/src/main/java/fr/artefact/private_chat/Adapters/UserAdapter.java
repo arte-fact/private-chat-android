@@ -16,14 +16,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>  {
     private java.util.List<User> dataSet;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView mTextView;
+        private final TextView mTextView;
 
         private ViewHolder(TextView v) {
             super(v);
             mTextView = v;
         }
 
-        public void setData(User user) {
+        void setData(User user) {
             mTextView.setText(user.getName());
         }
     }
