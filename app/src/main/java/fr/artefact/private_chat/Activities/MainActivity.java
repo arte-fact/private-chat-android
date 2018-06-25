@@ -54,8 +54,6 @@ public class MainActivity extends FragmentActivity {
         androidId = Settings.Secure.getString(MainActivity.this.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 
-        Log.d("android_id", androidId);
-
         homeFragment = new HomeFragment();
         contactsFragment = new ContactsFragment();
         settingsFragment = new SettingsFragment();
@@ -73,7 +71,6 @@ public class MainActivity extends FragmentActivity {
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "Erreur serveur",
                     Toast.LENGTH_SHORT).show();
-            Log.d("Erreur serveur:", e.toString());
         }
     }
 

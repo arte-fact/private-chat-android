@@ -1,7 +1,9 @@
 package fr.artefact.private_chat.Utilities;
 
 import android.content.Context;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.pusher.client.Pusher;
@@ -45,14 +47,18 @@ public class PusherClient {
     }
 
     public void subscribeChannel(int conversationId, final Context context) {
+        Looper.prepare();
         Channel channel = this.getPusher().subscribe("conversation-channel." + conversationId);
-
+        final AppDatabase db = AppDatabase.getAppDatabase(context);
         channel.bind("App\\Events\\MessageCreatedEvent", new SubscriptionEventListener() {
             @Override
             public void onEvent(String channelName, String eventName, final String data) {
                 Gson gson = new Gson();
                 MessageContainer messageContainer = gson.fromJson(data, MessageContainer.class);
                 Message message = messageContainer.getMessage();
+                Toast.makeText(context,
+                        db.userDao().get(message.getAuthorId()).getName(),
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }

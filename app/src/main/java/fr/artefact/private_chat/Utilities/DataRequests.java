@@ -47,7 +47,10 @@ public class DataRequests {
             @Override
             public void onResponse(@NonNull Call<UserContainer> call, @NonNull Response<UserContainer> response) {
                 try {
+                    User user = response.body().getUser();
+                    user.setOwner(true);
                     Toast.makeText(context, "Votre numéro d'utilisateur: " + response.body().getUser().getName(), Toast.LENGTH_LONG).show();
+                    AppDatabase.getAppDatabase(context).userDao().insert(response.body().getUser());
                 } catch (Exception e) {
                     Toast.makeText(
                             context,

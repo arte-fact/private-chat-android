@@ -19,6 +19,9 @@ public class User {
     @SerializedName("email")
     @Expose
     private String email;
+    @SerializedName("is_owner")
+    @Expose
+    private Boolean isOwner;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
@@ -64,5 +67,13 @@ public class User {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public void setOwner(Boolean owner) {
+        isOwner = owner;
+    }
+
+    public Boolean getOwner() {
+        return isOwner;
     }
 }

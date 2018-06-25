@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -16,15 +17,16 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>  {
     private java.util.List<User> dataSet;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView mTextView;
+        private final LinearLayout mTextView;
 
-        private ViewHolder(TextView v) {
+        private ViewHolder(LinearLayout v) {
             super(v);
             mTextView = v;
         }
 
         void setData(User user) {
-            mTextView.setText(user.getName());
+            TextView userName = mTextView.findViewById(R.id.user_name);
+            userName.setText(user.getName());
         }
     }
 
@@ -35,7 +37,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>  {
     @Override
     @NonNull
     public UserAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        TextView v = (TextView) LayoutInflater.from(parent.getContext())
+        LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_user_item, parent, false);
         return new UserAdapter.ViewHolder(v);
     }
@@ -60,7 +62,4 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>  {
         dataSet = users;
     }
 
-    public void addUser(User user) {
-        dataSet.add(user);
-    }
 }

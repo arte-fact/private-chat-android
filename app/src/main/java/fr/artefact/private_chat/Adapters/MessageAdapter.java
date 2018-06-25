@@ -61,12 +61,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         mRecyclerView = recyclerView;
     }
 
-    public void addItems(List<Message> dataSet) {
-        this.dataSet = dataSet;
-        notifyDataSetChanged();
-        this.mRecyclerView.scrollToPosition(mRecyclerView.getAdapter().getItemCount() - 1);
-    }
-
     public void addItem(Message message) {
         this.dataSet.add(message);
         notifyDataSetChanged();

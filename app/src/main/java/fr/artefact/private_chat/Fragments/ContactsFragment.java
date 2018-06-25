@@ -71,7 +71,7 @@ public class ContactsFragment extends Fragment {
                             }
 
                             @Override public void onLongItemClick(View view, int position) {
-                                Toast.makeText(view.getContext(), "click long", Toast.LENGTH_LONG).show();
+
                             }
                         })
         );

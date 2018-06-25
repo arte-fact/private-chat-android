@@ -69,9 +69,5 @@ public class HomeFragment extends Fragment {
                         })
         );
     }
-
-    public void notifyDataSetChanged() {
-        mAdapter.notifyDataSetChanged();
-    }
 }
 
