@@ -13,6 +13,7 @@ import fr.artefact.private_chat.Activities.ChatActivity;
 import fr.artefact.private_chat.Activities.MainActivity;
 import fr.artefact.private_chat.Models.AuthResponse;
 import fr.artefact.private_chat.Models.Conversation;
+import fr.artefact.private_chat.Models.Friendship;
 import fr.artefact.private_chat.Models.Message;
 import fr.artefact.private_chat.Models.ModelContainers.ConversationContainer;
 import fr.artefact.private_chat.Models.Settings;
@@ -37,7 +38,7 @@ public class DataRequests {
                         android_id + "@yyy.zzz",
                         "secret",
                         "2",
-                        "UwcOBEVIKf3Ob8Hc1chjRPIQLZpfcRVcvV9hvglM",
+                        "PBiWQfZqsxjpnWMYTx1fgfod6tcaYxsFgQm6yowo",
                         "*",
                         "password"
                 );
@@ -81,7 +82,7 @@ public class DataRequests {
                          android_id + "@yyy.zzz",
                         "secret",
                         "2",
-                        "UwcOBEVIKf3Ob8Hc1chjRPIQLZpfcRVcvV9hvglM",
+                        "PBiWQfZqsxjpnWMYTx1fgfod6tcaYxsFgQm6yowo",
                         "*",
                         "password"
                 );
@@ -113,6 +114,7 @@ public class DataRequests {
         fetchUsers(token, context, mainActivity);
         fetchConversations(token, context, mainActivity);
         fetchMessages(token, context);
+        fetchFriends(token, context, mainActivity);
     }
 
     private static void fetchUsers (String token, final Context context, final MainActivity mainActivity) {
@@ -121,14 +123,12 @@ public class DataRequests {
         final Call<List<User>> usersCall =
                 HttpClientHolder.getClient().getUsers("Bearer " + token);
 
-        // Execute the call asynchronously. Get a positive or negative callback.
         usersCall.enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(@NonNull Call<List<User>> call,@NonNull Response<List<User>> response) {
                 db.userDao().insertAll(response.body());
                 try {
-                    mainActivity.contactsFragment.mAdapter.addUsers(response.body());
-                    mainActivity.contactsFragment.mAdapter.notifyDataSetChanged();
+
                 } catch (Exception e) {
                     //
                 }
@@ -136,6 +136,32 @@ public class DataRequests {
 
             @Override
             public void onFailure(@NonNull Call<List<User>> call,@NonNull Throwable t) {
+                Toast.makeText(context, "Pas de réponse du serveur... :'(", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    private static void fetchFriends (String token, final Context context, final MainActivity mainActivity) {
+
+        final AppDatabase db = AppDatabase.getAppDatabase(context);
+        final Call<List<Friendship>> usersCall =
+                HttpClientHolder.getClient().getFriendships("Bearer " + token);
+
+        usersCall.enqueue(new Callback<List<Friendship>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Friendship>> call,@NonNull Response<List<Friendship>> response) {
+                try {
+                    db.friendshipDao().insertAll(response.body());
+                    mainActivity.contactsFragment.mAdapter.addItems(response.body());
+                    mainActivity.contactsFragment.mAdapter.notifyDataSetChanged();
+                } catch (Exception e) {
+                    //
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Friendship>> call,@NonNull Throwable t) {
                 Toast.makeText(context, "Pas de réponse du serveur... :'(", Toast.LENGTH_SHORT).show();
             }
         });
@@ -247,6 +273,42 @@ public class DataRequests {
             }
             @Override
             public void onFailure(@NonNull Call<Conversation> call, @NonNull Throwable t) {
+                Toast.makeText(
+                        context,
+                        "Pas de réponse du serveur... :'(",
+                        Toast.LENGTH_SHORT
+                ).show();
+            }
+        });
+    }
+
+    public static void createFriendship (String token, final Context context, String number, String name, final MainActivity mainActivity) {
+        final Call<Friendship> messageCall =
+                HttpClientHolder.getClient().postFriendship("Bearer " + token, number, name);
+
+        messageCall.enqueue(new Callback<Friendship>() {
+            @Override
+            public void onResponse(@NonNull Call<Friendship> call,@NonNull Response<Friendship> response) {
+                try {
+                    Friendship friendship = response.body();
+                    AppDatabase db = AppDatabase.getAppDatabase(context);
+                    db.friendshipDao().insert(friendship);
+                    mainActivity.contactsFragment.mAdapter.addItem(friendship);
+                    Intent chatActivity = new Intent(context, ChatActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("conversation_id", friendship.getFriendId());
+                    chatActivity.putExtras(bundle);
+                    context.startActivity(chatActivity, bundle);
+                } catch (Exception e) {
+                    Toast.makeText(
+                            context,
+                            "conversation erreur " + e.toString(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<Friendship> call, @NonNull Throwable t) {
                 Toast.makeText(
                         context,
                         "Pas de réponse du serveur... :'(",

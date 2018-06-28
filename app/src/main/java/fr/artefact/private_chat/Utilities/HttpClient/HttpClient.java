@@ -4,6 +4,7 @@ import java.util.List;
 
 import fr.artefact.private_chat.Models.AuthResponse;
 import fr.artefact.private_chat.Models.Conversation;
+import fr.artefact.private_chat.Models.Friendship;
 import fr.artefact.private_chat.Models.Message;
 import fr.artefact.private_chat.Models.ModelContainers.ConversationContainer;
 import fr.artefact.private_chat.Models.User;
@@ -41,6 +42,9 @@ public interface HttpClient {
     @GET("api/users")
     Call<List<User>> getUsers(@Header("authorization") String token);
 
+    @GET("api/friendships")
+    Call<List<Friendship>> getFriendships(@Header("authorization") String token);
+
     @GET("api/messages")
     Call<List<Message>> getMessages(@Header("authorization") String token);
 
@@ -53,9 +57,18 @@ public interface HttpClient {
             @Body Message message
             );
 
+    @FormUrlEncoded
     @POST("api/conversations")
     Call<Conversation> postConversation(
             @Header("authorization") String token,
-            @Body int user_id
+            @Field("user_id") int user_id
+            );
+
+    @FormUrlEncoded
+    @POST("api/friendships")
+    Call<Friendship> postFriendship(
+            @Header("authorization") String token,
+            @Field("user_number") String number,
+            @Field("user_name") String name
             );
 }

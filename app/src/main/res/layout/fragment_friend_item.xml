@@ -12,12 +12,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/user_name"
+        android:id="@+id/friend_name"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="1dp"
         android:layout_weight="1"
-        android:focusable="auto"
+        android:clickable="true"
+        android:focusable="true"
         android:padding="20dp" />
 
 </LinearLayout>
