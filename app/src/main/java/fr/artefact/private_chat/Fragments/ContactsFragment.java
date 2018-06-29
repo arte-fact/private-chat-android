@@ -20,16 +20,20 @@ import java.util.List;
 
 import fr.artefact.private_chat.Activities.MainActivity;
 import fr.artefact.private_chat.Adapters.FriendshipAdapter;
+import fr.artefact.private_chat.Interfaces.FrienshipResponse;
 import fr.artefact.private_chat.Models.Friendship;
 import fr.artefact.private_chat.R;
 import fr.artefact.private_chat.Utilities.AppDatabase;
 import fr.artefact.private_chat.Utilities.DataRequests;
 import fr.artefact.private_chat.Utilities.RecyclerItemOnClickListener;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ContactsFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
-    public FriendshipAdapter mAdapter;
+    private FriendshipAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private List<Friendship> friendships;
     private AppDatabase db;
@@ -60,7 +64,20 @@ public class ContactsFragment extends Fragment {
                 String name = nameInput.getText().toString();
 
                 DataRequests.createFriendship(db.authResponseDao().getAll().getAccessToken(),
-                        getContext(), number, name, (MainActivity) getActivity());
+                        getContext(), number, name, new FrienshipResponse() {
+                            @Override
+                            public void onResponse(@Nullable Friendship friendship, @Nullable String error) {
+                                if (error == null) {
+                                    mAdapter.addItem(friendship);
+                                } else {
+                                    Toast.makeText(
+                                            getContext(),
+                                            "Erreur serveur... :'(",
+                                            Toast.LENGTH_SHORT
+                                    ).show();
+                                }
+                            }
+                        });
             }
         });
         return view;
@@ -95,6 +112,10 @@ public class ContactsFragment extends Fragment {
                             }
                         })
         );
+    }
+
+    public FriendshipAdapter getmAdapter() {
+        return mAdapter;
     }
 }
 

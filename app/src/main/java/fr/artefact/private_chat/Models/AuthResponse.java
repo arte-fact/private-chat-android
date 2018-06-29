@@ -19,7 +19,7 @@ public class AuthResponse {
     @SerializedName("expires_in")
     @Expose
     private Integer expiresIn;
-    @Nullable
+    @NonNull
     @SerializedName("access_token")
     @Expose
     private String accessToken;
@@ -27,6 +27,7 @@ public class AuthResponse {
     @Expose
     private String refreshToken;
 
+    @NonNull
     public String getTokenType() {
         return tokenType;
     }
@@ -43,11 +44,12 @@ public class AuthResponse {
         this.expiresIn = expiresIn;
     }
 
+    @NonNull
     public String getAccessToken() {
         return accessToken;
     }
 
-    public void setAccessToken(String accessToken) {
+    public void setAccessToken(@NonNull String accessToken) {
         this.accessToken = accessToken;
     }
 

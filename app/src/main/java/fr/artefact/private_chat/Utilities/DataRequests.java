@@ -11,6 +11,7 @@ import java.util.List;
 
 import fr.artefact.private_chat.Activities.ChatActivity;
 import fr.artefact.private_chat.Activities.MainActivity;
+import fr.artefact.private_chat.Interfaces.FrienshipResponse;
 import fr.artefact.private_chat.Models.AuthResponse;
 import fr.artefact.private_chat.Models.Conversation;
 import fr.artefact.private_chat.Models.Friendship;
@@ -37,8 +38,8 @@ public class DataRequests {
                 HttpClientHolder.getClient().getUserNumber(
                         android_id + "@yyy.zzz",
                         "secret",
-                        "2",
-                        "PBiWQfZqsxjpnWMYTx1fgfod6tcaYxsFgQm6yowo",
+                        "4",
+                        "y3hgxWxLduMzYEjy52q24SIEz26GxeAvW5J54vqZ",
                         "*",
                         "password"
                 );
@@ -81,8 +82,8 @@ public class DataRequests {
                 HttpClientHolder.getClient().getAccessToken(
                          android_id + "@yyy.zzz",
                         "secret",
-                        "2",
-                        "PBiWQfZqsxjpnWMYTx1fgfod6tcaYxsFgQm6yowo",
+                        "4",
+                        "y3hgxWxLduMzYEjy52q24SIEz26GxeAvW5J54vqZ",
                         "*",
                         "password"
                 );
@@ -153,8 +154,8 @@ public class DataRequests {
             public void onResponse(@NonNull Call<List<Friendship>> call,@NonNull Response<List<Friendship>> response) {
                 try {
                     db.friendshipDao().insertAll(response.body());
-                    mainActivity.contactsFragment.mAdapter.addItems(response.body());
-                    mainActivity.contactsFragment.mAdapter.notifyDataSetChanged();
+                    mainActivity.contactsFragment.getmAdapter().addItems(response.body());
+                    mainActivity.contactsFragment.getmAdapter().notifyDataSetChanged();
                 } catch (Exception e) {
                     //
                 }
@@ -282,7 +283,7 @@ public class DataRequests {
         });
     }
 
-    public static void createFriendship (String token, final Context context, String number, String name, final MainActivity mainActivity) {
+    public static void createFriendship (String token, final Context context, String number, String name, final FrienshipResponse callback) {
         final Call<Friendship> messageCall =
                 HttpClientHolder.getClient().postFriendship("Bearer " + token, number, name);
 
@@ -293,13 +294,9 @@ public class DataRequests {
                     Friendship friendship = response.body();
                     AppDatabase db = AppDatabase.getAppDatabase(context);
                     db.friendshipDao().insert(friendship);
-                    mainActivity.contactsFragment.mAdapter.addItem(friendship);
-                    Intent chatActivity = new Intent(context, ChatActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("conversation_id", friendship.getFriendId());
-                    chatActivity.putExtras(bundle);
-                    context.startActivity(chatActivity, bundle);
+                    callback.onResponse(friendship, null);
                 } catch (Exception e) {
+                    callback.onResponse(null, e.getMessage());
                     Toast.makeText(
                             context,
                             "conversation erreur " + e.toString(),
@@ -309,6 +306,7 @@ public class DataRequests {
             }
             @Override
             public void onFailure(@NonNull Call<Friendship> call, @NonNull Throwable t) {
+                callback.onResponse(null, t.getMessage());
                 Toast.makeText(
                         context,
                         "Pas de réponse du serveur... :'(",

@@ -10,6 +10,7 @@ import fr.artefact.private_chat.Models.Conversation;
 import fr.artefact.private_chat.Models.Friendship;
 
 import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
+import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
 @Dao
 public interface FriendshipDao {
@@ -19,6 +20,6 @@ public interface FriendshipDao {
     @Insert (onConflict = IGNORE)
     void insertAll(List<Friendship> friendships);
 
-    @Insert (onConflict = IGNORE)
+    @Insert (onConflict = REPLACE)
     void insert(Friendship friendship);
 }
