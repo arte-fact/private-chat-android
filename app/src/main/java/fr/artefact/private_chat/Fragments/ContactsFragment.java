@@ -34,11 +34,11 @@ public class ContactsFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private FriendshipAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private List<Friendship> friendships;
     private AppDatabase db;
     private TextInputEditText numberInput;
     private TextInputEditText nameInput;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private List<Friendship> friendships;
 
 
     @Nullable
@@ -62,22 +62,29 @@ public class ContactsFragment extends Fragment {
             public void onClick(View v) {
                 String number = numberInput.getText().toString();
                 String name = nameInput.getText().toString();
-
-                DataRequests.createFriendship(db.authResponseDao().getAll().getAccessToken(),
-                        getContext(), number, name, new FrienshipResponse() {
-                            @Override
-                            public void onResponse(@Nullable Friendship friendship, @Nullable String error) {
-                                if (error == null) {
-                                    mAdapter.addItem(friendship);
-                                } else {
-                                    Toast.makeText(
-                                            getContext(),
-                                            "Erreur serveur... :'(",
-                                            Toast.LENGTH_SHORT
-                                    ).show();
+                if (number.equals("") || name.equals("")) {
+                    Toast.makeText(
+                            getContext(),
+                            "Veuillez entrer un numero d'utilisateur et un nom d'utilisateur valide.",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                } else {
+                    DataRequests.createFriendship(db.authResponseDao().getAll().getAccessToken(),
+                            getContext(), number, name, new FrienshipResponse() {
+                                @Override
+                                public void onResponse(@Nullable List<Friendship> friendships, @Nullable String error) {
+                                    if (error == null) {
+                                        mAdapter.addItems(friendships);
+                                    } else {
+                                        Toast.makeText(
+                                                getContext(),
+                                                "Numéro inconnu :'(",
+                                                Toast.LENGTH_SHORT
+                                        ).show();
+                                    }
                                 }
-                            }
-                        });
+                            });
+                }
             }
         });
         return view;
@@ -89,7 +96,6 @@ public class ContactsFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new FriendshipAdapter(friendships);
         mRecyclerView.setAdapter(mAdapter);
-
         setClickListener();
     }
 

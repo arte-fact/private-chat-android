@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -17,15 +18,16 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public RecyclerView mRecyclerView;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView mTextView;
+        private final LinearLayout mTextView;
 
-        private ViewHolder(TextView v) {
+        private ViewHolder(LinearLayout v) {
             super(v);
             mTextView = v;
         }
 
         void setData(Message message) {
-            mTextView.setText(message.getText());
+            TextView userName = mTextView.findViewById(R.id.user_name);
+            userName.setText(message.getText());
         }
     }
 
@@ -37,7 +39,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     @NonNull
     public MessageAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        TextView v = (TextView) LayoutInflater.from(parent.getContext())
+        LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_user_item, parent, false);
         return new MessageAdapter.ViewHolder(v);
     }

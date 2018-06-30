@@ -15,6 +15,7 @@ import fr.artefact.private_chat.Interfaces.FrienshipResponse;
 import fr.artefact.private_chat.Models.AuthResponse;
 import fr.artefact.private_chat.Models.Conversation;
 import fr.artefact.private_chat.Models.Friendship;
+import fr.artefact.private_chat.Models.ModelContainers.FriendshipContainer;
 import fr.artefact.private_chat.Models.Message;
 import fr.artefact.private_chat.Models.ModelContainers.ConversationContainer;
 import fr.artefact.private_chat.Models.Settings;
@@ -38,8 +39,8 @@ public class DataRequests {
                 HttpClientHolder.getClient().getUserNumber(
                         android_id + "@yyy.zzz",
                         "secret",
-                        "4",
-                        "y3hgxWxLduMzYEjy52q24SIEz26GxeAvW5J54vqZ",
+                        "2",
+                        "2eXQUQFMfjgp3lUKn5o3BdVvjjbsmsJHqjeQGHND",
                         "*",
                         "password"
                 );
@@ -82,8 +83,8 @@ public class DataRequests {
                 HttpClientHolder.getClient().getAccessToken(
                          android_id + "@yyy.zzz",
                         "secret",
-                        "4",
-                        "y3hgxWxLduMzYEjy52q24SIEz26GxeAvW5J54vqZ",
+                        "2",
+                        "2eXQUQFMfjgp3lUKn5o3BdVvjjbsmsJHqjeQGHND",
                         "*",
                         "password"
                 );
@@ -146,15 +147,16 @@ public class DataRequests {
     private static void fetchFriends (String token, final Context context, final MainActivity mainActivity) {
 
         final AppDatabase db = AppDatabase.getAppDatabase(context);
-        final Call<List<Friendship>> usersCall =
+        final Call<FriendshipContainer> usersCall =
                 HttpClientHolder.getClient().getFriendships("Bearer " + token);
 
-        usersCall.enqueue(new Callback<List<Friendship>>() {
+        usersCall.enqueue(new Callback<FriendshipContainer>() {
             @Override
-            public void onResponse(@NonNull Call<List<Friendship>> call,@NonNull Response<List<Friendship>> response) {
+            public void onResponse(@NonNull Call<FriendshipContainer> call,@NonNull Response<FriendshipContainer> response) {
                 try {
-                    db.friendshipDao().insertAll(response.body());
-                    mainActivity.contactsFragment.getmAdapter().addItems(response.body());
+                    List<Friendship> friendships = (List<Friendship>) response.body().getFriendship();
+                    db.friendshipDao().insertAll(friendships);
+                    mainActivity.contactsFragment.getmAdapter().addItems(friendships);
                     mainActivity.contactsFragment.getmAdapter().notifyDataSetChanged();
                 } catch (Exception e) {
                     //
@@ -162,7 +164,7 @@ public class DataRequests {
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<Friendship>> call,@NonNull Throwable t) {
+            public void onFailure(@NonNull Call<FriendshipContainer> call,@NonNull Throwable t) {
                 Toast.makeText(context, "Pas de réponse du serveur... :'(", Toast.LENGTH_SHORT).show();
             }
         });
@@ -284,28 +286,23 @@ public class DataRequests {
     }
 
     public static void createFriendship (String token, final Context context, String number, String name, final FrienshipResponse callback) {
-        final Call<Friendship> messageCall =
+        final Call<FriendshipContainer> messageCall =
                 HttpClientHolder.getClient().postFriendship("Bearer " + token, number, name);
 
-        messageCall.enqueue(new Callback<Friendship>() {
+        messageCall.enqueue(new Callback<FriendshipContainer>() {
             @Override
-            public void onResponse(@NonNull Call<Friendship> call,@NonNull Response<Friendship> response) {
+            public void onResponse(@NonNull Call<FriendshipContainer> call,@NonNull Response<FriendshipContainer> response) {
                 try {
-                    Friendship friendship = response.body();
+                    List<Friendship> friendships = (List<Friendship>) response.body().getFriendship();
                     AppDatabase db = AppDatabase.getAppDatabase(context);
-                    db.friendshipDao().insert(friendship);
-                    callback.onResponse(friendship, null);
+                    db.friendshipDao().insertAll(friendships);
+                    callback.onResponse(friendships, null);
                 } catch (Exception e) {
                     callback.onResponse(null, e.getMessage());
-                    Toast.makeText(
-                            context,
-                            "conversation erreur " + e.toString(),
-                            Toast.LENGTH_SHORT
-                    ).show();
                 }
             }
             @Override
-            public void onFailure(@NonNull Call<Friendship> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<FriendshipContainer> call, @NonNull Throwable t) {
                 callback.onResponse(null, t.getMessage());
                 Toast.makeText(
                         context,

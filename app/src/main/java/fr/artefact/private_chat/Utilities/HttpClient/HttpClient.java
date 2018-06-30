@@ -7,6 +7,7 @@ import fr.artefact.private_chat.Models.Conversation;
 import fr.artefact.private_chat.Models.Friendship;
 import fr.artefact.private_chat.Models.Message;
 import fr.artefact.private_chat.Models.ModelContainers.ConversationContainer;
+import fr.artefact.private_chat.Models.ModelContainers.FriendshipContainer;
 import fr.artefact.private_chat.Models.User;
 import fr.artefact.private_chat.Models.ModelContainers.UserContainer;
 import retrofit2.Call;
@@ -43,7 +44,7 @@ public interface HttpClient {
     Call<List<User>> getUsers(@Header("authorization") String token);
 
     @GET("api/friendships")
-    Call<List<Friendship>> getFriendships(@Header("authorization") String token);
+    Call<FriendshipContainer> getFriendships(@Header("authorization") String token);
 
     @GET("api/messages")
     Call<List<Message>> getMessages(@Header("authorization") String token);
@@ -66,7 +67,7 @@ public interface HttpClient {
 
     @FormUrlEncoded
     @POST("api/friendships")
-    Call<Friendship> postFriendship(
+    Call<FriendshipContainer> postFriendship(
             @Header("authorization") String token,
             @Field("user_number") String number,
             @Field("user_name") String name
