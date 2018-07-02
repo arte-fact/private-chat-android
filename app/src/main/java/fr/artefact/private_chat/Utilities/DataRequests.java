@@ -39,8 +39,8 @@ public class DataRequests {
                 HttpClientHolder.getClient().getUserNumber(
                         android_id + "@yyy.zzz",
                         "secret",
-                        "2",
-                        "2eXQUQFMfjgp3lUKn5o3BdVvjjbsmsJHqjeQGHND",
+                        "4",
+                        "9SYyQxWvrwvNu92DtrbBhuUYLfXpfbNDZJwwczF3",
                         "*",
                         "password"
                 );
@@ -83,8 +83,8 @@ public class DataRequests {
                 HttpClientHolder.getClient().getAccessToken(
                          android_id + "@yyy.zzz",
                         "secret",
-                        "2",
-                        "2eXQUQFMfjgp3lUKn5o3BdVvjjbsmsJHqjeQGHND",
+                        "4",
+                        "9SYyQxWvrwvNu92DtrbBhuUYLfXpfbNDZJwwczF3",
                         "*",
                         "password"
                 );
