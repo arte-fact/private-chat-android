@@ -113,34 +113,9 @@ public class DataRequests {
 
     private static void fetchAll (String token, final Context context, MainActivity mainActivity) {
 
-        fetchUsers(token, context, mainActivity);
         fetchConversations(token, context, mainActivity);
         fetchMessages(token, context);
         fetchFriends(token, context, mainActivity);
-    }
-
-    private static void fetchUsers (String token, final Context context, final MainActivity mainActivity) {
-
-        final AppDatabase db = AppDatabase.getAppDatabase(context);
-        final Call<List<User>> usersCall =
-                HttpClientHolder.getClient().getUsers("Bearer " + token);
-
-        usersCall.enqueue(new Callback<List<User>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<User>> call,@NonNull Response<List<User>> response) {
-                db.userDao().insertAll(response.body());
-                try {
-
-                } catch (Exception e) {
-                    //
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<User>> call,@NonNull Throwable t) {
-                Toast.makeText(context, "Pas de réponse du serveur... :'(", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
 

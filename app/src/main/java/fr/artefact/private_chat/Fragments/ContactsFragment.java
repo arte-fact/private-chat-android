@@ -106,7 +106,6 @@ public class ContactsFragment extends Fragment {
                         mRecyclerView,
                         new RecyclerItemOnClickListener.OnItemClickListener() {
                             @Override public void onItemClick(View view, int position) {
-                                Toast.makeText(view.getContext(), "click court", Toast.LENGTH_LONG).show();
                                 String token = db.authResponseDao().getAll().getAccessToken();
                                 Context context = view.getContext();
                                 int id = db.friendshipDao().getAll().get(position).getId();

@@ -92,6 +92,8 @@ public class ChatActivity extends AppCompatActivity {
                 message.setConversationId(conversationId);
 
                 DataRequests.sendMessage(token, ChatActivity.this, message);
+
+                editText.setText("");
             }
         });
     }
